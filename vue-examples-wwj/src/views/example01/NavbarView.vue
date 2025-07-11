@@ -2,10 +2,10 @@
 <template>
   <nav class="navbar">
     <ul class="nav-list">
-      <li><a href="#" class="nav-list-link">Home</a></li>
-      <li><a href="#" class="nav-list-link">News</a></li>
-      <li><a href="#" class="nav-list-link">Contact</a></li>
-      <li><a href="#" class="nav-list-link">About</a></li>
+      <li><router-link to="/home" class="nav-list-link">Home</router-link></li>
+      <li><router-link to="/news" class="nav-list-link">News</router-link></li>
+      <li><router-link to="/contact" class="nav-list-link">Contact</router-link></li>
+      <li><router-link to="/about" class="nav-list-link">About</router-link></li>
     </ul>
   </nav>
 </template>

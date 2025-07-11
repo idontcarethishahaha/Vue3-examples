@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import NavbarView from '@/views/NavbarView.vue'
-import SidebarView from '@/views/SidebarView.vue'
+import NavbarView from '@/views/example01/NavbarView.vue'
+import SidebarView from '@/views/example01/SidebarView.vue'
 import { RouterView } from 'vue-router'
 </script>
 

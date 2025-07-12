@@ -12,7 +12,7 @@ import { RouterView } from 'vue-router'
 <style>
 #app {
   display: flex;
-  background-color: #f4f4f4;
+  background-color: white;
   margin-top: 50px;
 }
 #sidebar {

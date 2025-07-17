@@ -16,7 +16,7 @@ import { RouterView } from 'vue-router'
   margin-top: 50px;
 }
 #sidebar {
-  border: 1px solid red;
+  border: 1px solid blue;
   min-width: 200px;
 }
 #main {

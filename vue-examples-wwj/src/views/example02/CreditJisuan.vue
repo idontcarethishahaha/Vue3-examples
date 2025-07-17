@@ -1,70 +1,78 @@
 <script setup lang="ts">
 import { listCourses } from '@/datasource/DataSource'
 import type { Course } from '@/datasource/Types'
-import { computed, ref, watch } from 'vue'
+import { computed, ref } from 'vue'
 
 const courses: Course[] = listCourses().sort((a, b) => a.term - b.term)
 
 const selectedCoursesR = ref<Course[]>([])
 
-const totalScoreC = computed(() =>
-  selectedCoursesR.value.reduce((sum, course) => sum + course.credit, 0)
-)
-
 const maxScore = 12
 
-watch(selectedCoursesR, newCourses => {
-  selectedCoursesR.value = newCourses.sort((a, b) => a.term - b.term)
+const selectedCoursesInfo = computed(() => {
+  const sortedCourses = [...selectedCoursesR.value].sort((a, b) => a.term - b.term)
+  const totalScore = sortedCourses.reduce((sum, course) => sum + course.credit, 0)
+  return { sortedCourses, totalScore }
 })
 </script>
 
 <template>
-  <div class="container">
-    <div class="score-dispaly" :style="{ color: totalScoreC >= 12 ? 'green' : 'red' }">
-      {{ totalScoreC }}/{{ maxScore }}
-    </div>
-    <div class="left">
-      <h2>这是你可以选的课~</h2>
-      <div v-for="course in courses" :key="course.id">
-        <label>
-          <input type="checkbox" :value="course" v-model="selectedCoursesR" />
-          {{ course.name }} - ({{ course.term }}) ({{ course.credit }}学分)
-        </label>
+  <div>
+    <div class="header">
+      <div
+        class="score-display"
+        :style="{ color: selectedCoursesInfo.totalScore >= maxScore ? 'green' : 'red' }">
+        {{ selectedCoursesInfo.totalScore }}/{{ maxScore }}
       </div>
     </div>
-    <div class="right">
-      <h2>这是你选好的课~</h2>
-      <div v-for="course in selectedCoursesR" :key="course.id">
-        <p>{{ course.name }} - ({{ course.term }}) ({{ course.credit }}学分)</p>
+    <div class="courses">
+      <div class="left">
+        <h2>这是你可以选的课~</h2>
+        <div v-for="course in courses" :key="course.id">
+          <label>
+            <input type="checkbox" :value="course" v-model="selectedCoursesR" />
+            {{ course.name }} - ({{ course.term }}) ({{ course.credit }}学分)
+          </label>
+        </div>
+      </div>
+      <div class="right">
+        <h2>这是你选好的课~</h2>
+        <div v-for="course in selectedCoursesInfo.sortedCourses" :key="course.id">
+          <label>
+            <input type="checkbox" :value="course" v-model="selectedCoursesR" />
+            {{ course.name }} - ({{ course.term }}) ({{ course.credit }}学分)
+          </label>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
-<style>
-.container {
-  display: flex;
-  padding: 20px;
-  position: relative;
+<style scoped>
+.header {
+  margin-bottom: 20px;
 }
 
-.score-dispaly {
-  position: absolute;
+.score-display {
   font-size: 24px;
   font-weight: bold;
-  top: 20px;
-  left: 20px;
+  padding: 10px 0;
 }
+
+.courses {
+  display: flex;
+  gap: 20px;
+}
+
 .left {
   flex: 1;
-  margin-top: 40px;
-  border-right: 1px solid #ccc;
-  padding-right: 20px;
+  border: 1px solid #ccc;
+  padding: 15px;
 }
 
 .right {
   flex: 1;
-  margin-top: 40px;
-  padding-left: 20px;
+  border: 1px solid #ccc;
+  padding: 15px;
 }
 </style>

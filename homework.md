@@ -4,7 +4,7 @@
 
 ### 组件动态切换
 
-![输入图片说明](hwk01.gif)
+<img src="./assets/imhwk01.gif" width=224 height=71 />
 
 #### 需求0
 
@@ -13,7 +13,7 @@
 
 ### Checkbox双向互交绑定
 
-![输入图片说明](hwk04.gif)
+<img src="./assets/homework04.gif" width=395 height=48 />
 
 #### 需求0
 
@@ -22,7 +22,7 @@
 
 ### 组件封装与暴露属性
 
-![输入图片说明](hwk02.gif)
+<img src="./assets/imhwk02.gif" width=253 height=170 />
 
 #### 需求0
 
@@ -35,7 +35,7 @@
 
 ### 基于Slot的组件内容扩展
 
-![输入图片说明](hwk03.gif)
+<img src="./assets/homework03.gif" width=225 height=304 />
 
 #### 需求0
 
@@ -48,7 +48,7 @@
 
 ### 函数式全屏Loading遮罩组件
 
-![输入图片说明](hwk05.gif)
+<img src="./assets/homework05.gif" width=320 height=117 />
 
 #### 需求0
 

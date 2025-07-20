@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
-
+import HomeView from '../views/example03/HomeView.vue'
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
@@ -20,6 +20,28 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/homework02',
     component: () => import('@/views/homework02/IndexView.vue')
+  },
+  {
+    path: '/example03',
+    component: HomeView,
+    children: [
+      {
+        path: '', // 默认子路由
+        component: () => import('../views/example03/ShopListView.vue')
+      },
+      {
+        path: 'shops/:sid',
+        component: () => import('../views/example03/ShopView.vue')
+      },
+      {
+        path: 'location',
+        component: () => import('../views/example03/LocationView.vue')
+      },
+      {
+        path: 'orders',
+        component: () => import('../views/example03/OrderView.vue')
+      }
+    ]
   }
 ]
 

@@ -1,43 +1,45 @@
 <script setup lang="ts">
 import { listCourses } from '@/datasource/DataSource'
 import type { Course } from '@/datasource/Types'
-import { computed, ref } from 'vue'
+import { ref, watch } from 'vue'
 
-const courses: Course[] = listCourses().sort((a, b) => a.term - b.term)
-
+const coursesR = ref(listCourses().sort((a, b) => a.term - b.term))
 const selectedCoursesR = ref<Course[]>([])
-
 const maxScore = 12
+const totalScoreR = ref(0)
 
-const selectedCoursesInfo = computed(() => {
-  const sortedCourses = [...selectedCoursesR.value].sort((a, b) => a.term - b.term)
-  const totalScore = sortedCourses.reduce((sum, course) => sum + course.credit, 0)
-  return { sortedCourses, totalScore }
-})
+watch(
+  selectedCoursesR,
+  newValue => {
+    totalScoreR.value = newValue.reduce((sum, course) => sum + course.credit, 0)
+    newValue.sort((a, b) => a.term - b.term)
+  },
+  { deep: true }
+)
 </script>
 
 <template>
   <div>
     <div class="header">
-      <div
-        class="score-display"
-        :style="{ color: selectedCoursesInfo.totalScore >= maxScore ? 'green' : 'red' }">
-        {{ selectedCoursesInfo.totalScore }}/{{ maxScore }}
+      <div class="score-display" :style="{ color: totalScoreR >= maxScore ? 'green' : 'red' }">
+        {{ totalScoreR }}/{{ maxScore }}
       </div>
     </div>
+
     <div class="courses">
       <div class="left">
         <h2>这是你可以选的课~</h2>
-        <div v-for="course in courses" :key="course.id">
+        <div v-for="course of coursesR" :key="course.id">
           <label>
             <input type="checkbox" :value="course" v-model="selectedCoursesR" />
             {{ course.name }} - ({{ course.term }}) ({{ course.credit }}学分)
           </label>
         </div>
       </div>
+
       <div class="right">
         <h2>这是你选好的课~</h2>
-        <div v-for="course in selectedCoursesInfo.sortedCourses" :key="course.id">
+        <div v-for="course of selectedCoursesR" :key="course.id">
           <label>
             <input type="checkbox" :value="course" v-model="selectedCoursesR" />
             {{ course.name }} - ({{ course.term }}) ({{ course.credit }}学分)
@@ -62,14 +64,10 @@ const selectedCoursesInfo = computed(() => {
 .courses {
   display: flex;
   gap: 20px;
+  margin-top: 20px;
 }
 
-.left {
-  flex: 1;
-  border: 1px solid #ccc;
-  padding: 15px;
-}
-
+.left,
 .right {
   flex: 1;
   border: 1px solid #ccc;

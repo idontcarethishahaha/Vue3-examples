@@ -4,7 +4,7 @@
 
 ### 组件动态切换
 
-<img src="./assets/image_homework/imhwk01.gif" width=224 height=71 />
+<img src="![输入图片说明](vue-examples-wwj/src/assets/image_homework/imhwk01.gif)" width=224 height=71 />
 
 #### 需求0
 

@@ -13,7 +13,7 @@
 
 ### Checkbox双向互交绑定
 
-<img src="./assets/image_homework/homework04.gif" width=395 height=48 />
+<img src="vue-examples-wwj/src/assets/image_homework/homework04.gif" width=395 height=48 />
 
 #### 需求0
 
@@ -35,7 +35,7 @@
 
 ### 基于Slot的组件内容扩展
 
-<img src="./assets/image_homework/homework03.gif" width=225 height=304 />
+<img src="vue-examples-wwj/src/assets/image_homework/homework03.gif" width=225 height=304 />
 
 #### 需求0
 
@@ -48,7 +48,7 @@
 
 ### 函数式全屏Loading遮罩组件
 
-<img src="./assets/image_homework/homework05.gif" width=320 height=117 />
+<img src="vue-examples-wwj/src/assets/image_homework/homework05.gif" width=320 height=117 />
 
 #### 需求0
 

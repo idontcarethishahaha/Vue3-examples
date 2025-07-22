@@ -22,7 +22,7 @@
 
 ### 组件封装与暴露属性
 
-<img src="./assets/image_homework/imhwk02.gif" width=253 height=170 />
+<img src="vue-examples-wwj/src/assets/image_homework/imhwk02.gif" width=253 height=170 />
 
 #### 需求0
 

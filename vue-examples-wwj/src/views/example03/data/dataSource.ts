@@ -254,7 +254,7 @@ const shops: Shops[] = [
         id: '302',
         name: '猪脚 + 烧鸭饭',
         price: 31.8,
-        img: 'https://pic.nximg.cn/file/20231005/31753293_161606504104_2.jpg',
+        img: 'https://ts4.tc.mm.bing.net/th/id/OIP-C.-k_asvs8q7pV6L0SErCCDwHaE8?r=0&rs=1&pid=ImgDetMain&o=7&rm=3',
         sales: 90
       },
       {
@@ -275,7 +275,7 @@ const shops: Shops[] = [
         id: '305',
         name: '随机三拼饭',
         price: 33.1,
-        img: 'https://pic.nximg.cn/file/20230407/14386196_153844304104_2.jpg',
+        img: 'https://ts1.tc.mm.bing.net/th/id/OIP-C.-LXe9g-e_W_Jug1EwxaMUAHaE8?r=0&rs=1&pid=ImgDetMain&o=7&rm=3',
         sales: 77
       },
       {

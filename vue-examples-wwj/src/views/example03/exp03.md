@@ -4,7 +4,7 @@
 
 ### 分层架构
 
-<img src="![输入图片说明](../../assets/exp03/img_1.jpg)" />
+<img src="../../assets/exp03/img_1.jpg" />
 
 ## 数据准备 data
 

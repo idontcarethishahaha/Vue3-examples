@@ -4,7 +4,8 @@
 
 ### 分层架构
 
-<img src="vue-examples-wwj/src/assets/exp03/img_1.jpg" />
+<img src="![输入图片说明](../../assets/exp03/img_1.jpg)" />
+
 ## 数据准备 data
 
 ### 接口定义

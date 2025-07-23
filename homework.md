@@ -58,9 +58,3 @@
 
 全局模态框组件由事件激活卸载(点击关闭)，而Loading组件是随函数的执行(响应数据返回)而卸载，因此需提供卸载函数在合适位置调用执行。
 
-graph TD
-    A[组件] --> B[Service层]
-    B --> C[Store/State]
-    B --> D[Mock API]
-    C --> E[Vue响应式系统]
-

@@ -1,30 +1,3 @@
-<template>
-  <div class="shop-view" v-if="shop">
-    <h2>{{ shop.name }}</h2>
-    <div class="shop-info">
-      <img :src="shop.img" :alt="shop.name" class="shop-image" />
-      <p>评分: {{ shop.score }} | 电话: {{ shop.phone }}</p>
-    </div>
-
-    <div class="item-list">
-      <div v-for="item in shop.items" :key="item.id" class="item">
-        <img :src="item.img" :alt="item.name" class="item-image" />
-        <div class="item-info">
-          <h3>{{ item.name }}</h3>
-          <p>¥{{ item.price }} | 销量: {{ item.sales }}</p>
-        </div>
-        <div class="item-actions">
-          <button @click="removeItem(item)">-</button>
-          <span>{{ getQuantity(item.id) }}</span>
-          <button @click="addItem(item)">+</button>
-        </div>
-      </div>
-    </div>
-
-    <OrderSummary :shopId="shop.id" />
-  </div>
-</template>
-
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
@@ -61,6 +34,33 @@ const getQuantity = (itemId: string) => {
   return shop.value ? getItemQuantityService(shop.value.id, itemId) : 0
 }
 </script>
+
+<template>
+  <div class="shop-view" v-if="shop">
+    <h2>{{ shop.name }}</h2>
+    <div class="shop-info">
+      <img :src="shop.img" :alt="shop.name" class="shop-image" />
+      <p>评分:⭐ {{ shop.score }} | 电话: {{ shop.phone }}</p>
+    </div>
+
+    <div class="item-list">
+      <div v-for="item in shop.items" :key="item.id" class="item">
+        <img :src="item.img" :alt="item.name" class="item-image" />
+        <div class="item-info">
+          <h3>{{ item.name }}</h3>
+          <p>¥{{ item.price }} | 销量: {{ item.sales }}</p>
+        </div>
+        <div class="item-actions">
+          <button @click="removeItem(item)">-</button>
+          <span>{{ getQuantity(item.id) }}</span>
+          <button @click="addItem(item)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <OrderSummary :shopId="shop.id" />
+  </div>
+</template>
 
 <style scoped>
 .shop-view {

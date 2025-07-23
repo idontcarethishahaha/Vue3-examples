@@ -30,7 +30,7 @@ export interface Order {
   }[]
 }
 
-// 获取店铺列表模拟数据
+// 店铺列表
 export const listShopsMock = async (): Promise<Shops[]> => {
   return new Promise<Shops[]>(resolve => {
     setTimeout(() => {
@@ -39,7 +39,7 @@ export const listShopsMock = async (): Promise<Shops[]> => {
   })
 }
 
-// 获取单个店铺详情模拟数据
+// 单个店铺
 export const getShopMock = async (id: string): Promise<Shops | undefined> => {
   return new Promise<Shops | undefined>(resolve => {
     setTimeout(() => {
@@ -48,7 +48,7 @@ export const getShopMock = async (id: string): Promise<Shops | undefined> => {
   })
 }
 
-// 获取商品列表模拟数据
+// 商品列表
 export const getShopItemsMock = async (shopId: string): Promise<Item[]> => {
   return new Promise<Item[]>(resolve => {
     setTimeout(() => {
@@ -58,7 +58,7 @@ export const getShopItemsMock = async (shopId: string): Promise<Item[]> => {
   })
 }
 
-// 创建订单模拟数据
+// 订单
 export const createOrderMock = async (order: Order): Promise<Order> => {
   return new Promise<Order>(resolve => {
     setTimeout(() => {

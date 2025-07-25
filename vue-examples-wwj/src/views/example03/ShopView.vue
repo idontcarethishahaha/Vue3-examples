@@ -46,15 +46,15 @@ const orderQ = computed(() => (item: Item) => {
 <template>
   <div>
     <h3 style="margin: 0">{{ shopR?.name }}</h3>
-    <div v-for="(item, index) of shopR?.items" :key="index" class="item-container">
-      <img :src="item.img" :alt="item.name" class="item-image" />
-      <div class="card">
+    <div v-for="(item, index) of shopR?.items" :key="index" class="item">
+      <img :src="item.img" :alt="item.name" />
+      <div>
         <h4>{{ item.name }}</h4>
-        <p>价格：¥{{ item.price?.toFixed(2) }}</p>
+        <p>价格：¥{{ item.price }}</p>
         <p>月销量：{{ item.sales }}</p>
-        <div class="quantity-control">
+        <div>
           <button @click="remove(item)">-</button>
-          <span class="quantity">{{ orderQ(item) }}</span>
+          <span>{{ orderQ(item) }}</span>
           <button @click="add(item)">+</button>
         </div>
       </div>
@@ -63,7 +63,7 @@ const orderQ = computed(() => (item: Item) => {
 </template>
 
 <style scoped>
-.item-container {
+.item {
   display: flex;
   padding: 10px;
   margin-bottom: 15px;
@@ -71,7 +71,7 @@ const orderQ = computed(() => (item: Item) => {
   border-radius: 8px;
 }
 
-.item-image {
+.item img {
   width: 150px;
   height: 150px;
   object-fit: cover;
@@ -79,17 +79,17 @@ const orderQ = computed(() => (item: Item) => {
   border-radius: 4px;
 }
 
-.card {
+.item > div {
   flex: 1;
 }
 
-.quantity-control {
+.item > div > div {
   margin-top: 10px;
   display: flex;
   align-items: center;
 }
 
-.quantity-control button {
+button {
   padding: 5px 10px;
   margin: 0 5px;
   border: 1px solid #ddd;
@@ -98,23 +98,7 @@ const orderQ = computed(() => (item: Item) => {
   border-radius: 4px;
 }
 
-.quantity-control button:hover {
+button:hover {
   background: #e0e0e0;
-}
-
-.quantity {
-  display: inline-block;
-  min-width: 20px;
-  text-align: center;
-}
-
-h4 {
-  margin: 5px 0;
-  color: #333;
-}
-
-p {
-  margin: 5px 0;
-  color: #666;
 }
 </style>

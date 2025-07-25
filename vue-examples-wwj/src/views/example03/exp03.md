@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 # 实验三 单一数据源实验⭐
 
 ## 架构设计思想
@@ -661,4 +659,5 @@ export const listShopsService = async (): Promise<Shops[]> => {
 ```
 
 ## 组件 components
->>>>>>> a734b822ba33006599fa8c56180cd00fa12b3d31
+
+> > > > > > > a734b822ba33006599fa8c56180cd00fa12b3d31

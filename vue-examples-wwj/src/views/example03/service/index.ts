@@ -1,8 +1,8 @@
 import { getShopMock, listShopsMock } from '../data/dataSource'
-import { useH2Store } from '../store/index'
+import { useStore } from '../store/index'
 
 export const listShopsService = async () => {
-  const shopListS = useH2Store().shopListR
+  const shopListS = useStore().shopListR
   if (shopListS.value.length == 0) {
     shopListS.value = await listShopsMock()
   }
@@ -10,7 +10,7 @@ export const listShopsService = async () => {
 }
 
 export const getShopService = async (sid: string) => {
-  const shopMapR = useH2Store().shopMapR
+  const shopMapR = useStore().shopMapR
   let shopItemsS = shopMapR.get(sid)
   if (shopItemsS) return shopItemsS
   // 异步加载数据，并更新store
@@ -20,5 +20,5 @@ export const getShopService = async (sid: string) => {
 }
 
 export const getOrdersService = () => {
-  return useH2Store().ordersR
+  return useStore().ordersR
 }

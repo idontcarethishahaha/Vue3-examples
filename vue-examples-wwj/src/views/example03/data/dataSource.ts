@@ -1,37 +1,58 @@
 export interface Shops {
   id: string
   name: string
-  //address: string
-  phone: string
-  img?: string
+  phone?: string
   score: number
-  //startFee: number
-  deliveryFee?: number //配送费
-  items: Item[]
+  //deliveryFee?: number
+  img?: string
+  items?: Item[]
 }
 
 export interface Item {
   id: string
   name: string
   price: number
-  img: string
-  //description?: string
-  //type:'food'|'drink'
   sales: number
+  img?: string
 }
 
 export interface Order {
-  shopId: string
-  shopName: string
-  deliveryFee: number
-  items: {
-    item: Item
-    quantity: number
-  }[]
+  quantity: number
+  item: Item
 }
 
-// 店铺列表
-export const listShopsMock = async (): Promise<Shops[]> => {
+// 获取店铺列表
+export const listShopsMock = async () => {
+  const shops: Shops[] = [
+    {
+      id: '1',
+      name: '华莱士(南平汽车站店)',
+      score: 4.5,
+      phone: '0599-893-1558',
+      img: 'https://p0.meituan.net/waimaipoi/0ea21b2140465d6795e05bca217af864865369.png'
+    },
+    {
+      id: '2',
+      name: '蜜雪冰城(马站店)',
+      score: 5.0,
+      phone: '173-6098-5085',
+      img: 'https://p0.meituan.net/waimaipoi/1c479083ce39fb5515f7ad1503b427ee178972.jpg'
+    },
+    {
+      id: '3',
+      name: '隆江猪脚饭(马站店)',
+      score: 4.3,
+      phone: '137-0690-0099',
+      img: 'https://p0.meituan.net/business/7757f606939b0fb5752b5e472c4123ee78679.jpg'
+    },
+    {
+      id: '4',
+      name: '幸运咖(四鹤店)',
+      score: 4.8,
+      phone: '185-0599-9773',
+      img: 'https://p0.meituan.net/waimaipoi/dd32cb2b736aeef4154f320fb712f4e3883762.png'
+    }
+  ]
   return new Promise<Shops[]>(resolve => {
     setTimeout(() => {
       resolve(shops)
@@ -39,31 +60,12 @@ export const listShopsMock = async (): Promise<Shops[]> => {
   })
 }
 
-// 单个店铺
-export const getShopMock = async (id: string): Promise<Shops | undefined> => {
-  return new Promise<Shops | undefined>(resolve => {
+//
+export const getShopMock = async (sid: string) => {
+  return new Promise<Shops>(resolve => {
     setTimeout(() => {
-      resolve(shops.find(shop => shop.id === id))
+      resolve(shops.find(sh => sh.id == sid)!)
     }, 1000)
-  })
-}
-
-// 商品列表
-export const getShopItemsMock = async (shopId: string): Promise<Item[]> => {
-  return new Promise<Item[]>(resolve => {
-    setTimeout(() => {
-      const shop = shops.find(s => s.id === shopId)
-      resolve(shop?.items || [])
-    }, 800)
-  })
-}
-
-// 订单
-export const createOrderMock = async (order: Order): Promise<Order> => {
-  return new Promise<Order>(resolve => {
-    setTimeout(() => {
-      resolve(order)
-    }, 500)
   })
 }
 
@@ -74,7 +76,7 @@ const shops: Shops[] = [
     phone: '0599-893-1558',
     img: 'https://p0.meituan.net/waimaipoi/0ea21b2140465d6795e05bca217af864865369.png',
     score: 4.5,
-    deliveryFee: 2,
+    //deliveryFee: 2,
     items: [
       {
         id: '101',
@@ -140,7 +142,7 @@ const shops: Shops[] = [
     phone: '173-6098-5085',
     img: 'https://p0.meituan.net/waimaipoi/1c479083ce39fb5515f7ad1503b427ee178972.jpg',
     score: 5.0,
-    deliveryFee: 2,
+    //deliveryFee: 2,
     items: [
       {
         id: '201',
@@ -241,7 +243,7 @@ const shops: Shops[] = [
     phone: '137-0690-0099',
     img: 'https://p0.meituan.net/business/7757f606939b0fb5752b5e472c4123ee78679.jpg',
     score: 4.3,
-    deliveryFee: 0.5,
+    //deliveryFee: 0.5,
     items: [
       {
         id: '301',
@@ -293,7 +295,7 @@ const shops: Shops[] = [
     phone: '185-0599-9773',
     img: 'https://p0.meituan.net/waimaipoi/dd32cb2b736aeef4154f320fb712f4e3883762.png',
     score: 4.8,
-    deliveryFee: 2.9,
+    //deliveryFee: 2.9,
     items: [
       {
         id: '401',

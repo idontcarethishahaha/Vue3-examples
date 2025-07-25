@@ -1,46 +1,24 @@
-import type { Item, Shops } from '../data/dataSource'
 import { getShopMock, listShopsMock } from '../data/dataSource'
-import { useStore } from '../store'
+import { useH2Store } from '../store/index'
 
-export const listShopsService = async (): Promise<Shops[]> => {
-  const { shopList } = useStore()
-  if (shopList.value.length === 0) {
-    const mockData = await listShopsMock()
-    shopList.value = mockData || [] // 确保总是返回数组
+export const listShopsService = async () => {
+  const shopListS = useH2Store().shopListR
+  if (shopListS.value.length == 0) {
+    shopListS.value = await listShopsMock()
   }
-  return [...shopList.value] // 返回新数组
+  return shopListS
 }
 
-export const getShopService = async (sid: string): Promise<Shops | null> => {
-  const { shopMap } = useStore()
-  let shop = shopMap.value.get(sid)
-  if (shop) return shop
-
+export const getShopService = async (sid: string) => {
+  const shopMapR = useH2Store().shopMapR
+  let shopItemsS = shopMapR.get(sid)
+  if (shopItemsS) return shopItemsS
   // 异步加载数据，并更新store
-  shop = await getShopMock(sid)
-  if (shop) {
-    shopMap.value.set(sid, shop)
-    return shop
-  }
-  return null
+  shopItemsS = await getShopMock(sid)
+  shopMapR.set(sid, shopItemsS)
+  return shopItemsS
 }
 
 export const getOrdersService = () => {
-  return useStore().orders
-}
-
-export const addOrderService = (shop: Shops, item: Item) => {
-  return useStore().addOrder(shop, item)
-}
-
-export const removeOrderService = (shop: Shops, item: Item) => {
-  return useStore().removeOrder(shop, item)
-}
-
-export const getItemQuantityService = (shopId: string, itemId: string) => {
-  return useStore().getItemQuantity(shopId, itemId)
-}
-
-export const getTotalCostService = () => {
-  return useStore().totalCost
+  return useH2Store().ordersR
 }

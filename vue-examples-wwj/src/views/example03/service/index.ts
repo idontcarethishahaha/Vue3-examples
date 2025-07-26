@@ -13,7 +13,6 @@ export const getShopService = async (sid: string) => {
   const shopMapR = useStore().shopMapR
   let shopItemsS = shopMapR.get(sid)
   if (shopItemsS) return shopItemsS
-  // 异步加载数据，并更新store
   shopItemsS = await getShopMock(sid)
   shopMapR.set(sid, shopItemsS)
   return shopItemsS

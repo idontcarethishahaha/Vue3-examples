@@ -1,6 +1,5 @@
 import { getShopMock, listShopsMock, type Shops } from '../data/dataSource'
 
-// Use proper typing instead of 'any'
 const shopCache = new Map<string, Shops | Shops[]>()
 
 export const shopService = {

@@ -5,7 +5,7 @@ import OrderCostVue from './OrderCost.vue'
 <template>
   <div class="container">
     <h2>Example 03</h2>
-    <nav class="tabs">
+    <nav class="tab">
       <router-link to="/example03">附近店铺</router-link>
       |
       <router-link to="/example03/location">位置</router-link>
@@ -21,7 +21,7 @@ import OrderCostVue from './OrderCost.vue'
   flex-direction: column;
   min-height: 100vh;
 }
-.tabs {
+.tab {
   padding: 1rem;
   background: #f5f5f5;
 }

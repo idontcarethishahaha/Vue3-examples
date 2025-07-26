@@ -8,7 +8,7 @@ const route = useRoute()
 const shopR = shallowRef<Shops>()
 const orders = getOrdersService()
 
-// 加载店铺数据
+// 店铺数据
 getShopService(route.params.sid as string).then(shop => {
   shopR.value = shop
 })

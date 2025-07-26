@@ -1,9 +1,5 @@
-# Vite-Vue3
+# Experiments
 
-## 介绍
-这个仓库用于放置一些我写的vue实验
-
-## Experiments
 0. 实验一现在是我的总菜单
 1. 实验的代码在src/views下
 2. 实验的效果图在src/assets下

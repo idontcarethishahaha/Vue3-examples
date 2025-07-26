@@ -1,28 +1,29 @@
 <script setup lang="ts">
 import { shallowRef } from 'vue'
 import type { Shops } from './data/dataSource'
-import { listShopsService } from './service'
+import { shopService } from './service'
 
 const shopsR = shallowRef<Shops[]>([])
-
-listShopsService().then(res => {
-  shopsR.value = res.value
-})
+shopService.getShopList().then(res => (shopsR.value = res))
 </script>
 
 <template>
-  <div class="grid">
-    <div v-for="shop of shopsR" :key="shop.id" class="card">
-      <router-link :to="`/example03/shops/${shop.id}`">
-        <div class="img-container">
-          <img v-if="shop.img" :src="shop.img" :alt="shop.name" />
-        </div>
-        <div class="info">
-          <h3>{{ shop.name }}</h3>
-          <div>⭐ {{ shop.score }}</div>
-          <div v-if="shop.phone">📞 {{ shop.phone }}</div>
-        </div>
-      </router-link>
+  <div class="shop-list">
+    <div class="grid">
+      <div v-for="shop of shopsR" :key="shop.id" class="card">
+        <router-link :to="`/example03/shops/${shop.id}`">
+          <div class="img-container">
+            <img v-if="shop.img" :src="shop.img" :alt="shop.name" />
+          </div>
+          <div class="info">
+            <h3>{{ shop.name }}</h3>
+            <div>
+              <div>⭐ {{ shop.score }}</div>
+              <div v-if="shop.phone">📞 {{ shop.phone }}</div>
+            </div>
+          </div>
+        </router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -32,7 +33,7 @@ listShopsService().then(res => {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
-  padding: 1rem;
+  padding: 0 1rem;
 }
 
 .card {
@@ -40,9 +41,7 @@ listShopsService().then(res => {
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .card:hover {
@@ -64,13 +63,5 @@ img {
 
 .card:hover img {
   transform: scale(1.05);
-}
-
-.info {
-  padding: 1rem;
-}
-
-.info h3 {
-  margin: 0 0 0.5rem;
 }
 </style>

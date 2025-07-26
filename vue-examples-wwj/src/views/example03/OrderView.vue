@@ -17,7 +17,7 @@ const ordersC = computed(() => getOrdersService().value)
             <span>× {{ o.quantity }}</span>
           </div>
         </div>
-        <div class="total">¥{{ (o.item.price * o.quantity).toFixed(2) }}</div>
+        <div class="total">¥{{ o.item.price * o.quantity }}</div>
       </div>
     </div>
   </div>

@@ -4,19 +4,19 @@ import { useStore } from './store'
 
 const { ordersR } = useStore()
 
-// 计算属性：订单总价
-const totalCost = computed(() =>
+// 订单总价
+const totalCostC = computed(() =>
   ordersR.value.reduce((sum, order) => sum + (order.item.price ?? 0) * order.quantity, 0)
 )
 
-// 计算属性：订单项数量
-const orderCount = computed(() => ordersR.value.length)
+// 订单项数量
+const orderCountC = computed(() => ordersR.value.length)
 </script>
 
 <template>
-  <router-link to="/example03/orders" class="notice" v-if="orderCount > 0">
+  <router-link to="/example03/orders" class="notice" v-if="orderCountC > 0">
     <span class="text">小计:</span>
-    <span class="total">¥{{ totalCost.toFixed(2) }}</span>
+    <span class="total">¥{{ totalCostC }}</span>
     <span class="text">(点击查看订单详情)</span>
   </router-link>
 </template>

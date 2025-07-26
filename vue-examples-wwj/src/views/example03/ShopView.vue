@@ -1,4 +1,3 @@
-<!-- views/example03/ShopView.vue -->
 <script setup lang="ts">
 import { computed, shallowRef } from 'vue'
 import { useRoute } from 'vue-router'
@@ -14,7 +13,7 @@ getShopService(route.params.sid as string).then(shop => {
   shopR.value = shop
 })
 
-// 添加商品到订单
+// 添加商品
 const add = (item: Item) => {
   const existingOrder = orders.value.find(o => o.item.id === item.id)
   if (existingOrder) {
@@ -24,7 +23,7 @@ const add = (item: Item) => {
   }
 }
 
-// 从订单中移除商品
+// 移除商品
 const remove = (item: Item) => {
   const index = orders.value.findIndex(o => o.item.id === item.id)
   if (index !== -1) {
@@ -36,7 +35,7 @@ const remove = (item: Item) => {
   }
 }
 
-// 获取商品在订单中的数量
+// 商品在订单中数量
 const orderQ = computed(() => (item: Item) => {
   const order = orders.value.find(o => o.item.id === item.id)
   return order?.quantity || 0

@@ -42,28 +42,6 @@ const routes: RouteRecordRaw[] = [
         component: () => import('../views/example03/OrderView.vue')
       }
     ]
-  },
-  {
-    path: '/example03_2',
-    component: IndexView,
-    children: [
-      {
-        path: '', // 默认子路由
-        component: () => import('../views/example03/ShopListView.vue')
-      },
-      {
-        path: 'shops/:sid',
-        component: () => import('../views/example03/ShopView.vue')
-      },
-      {
-        path: 'location',
-        component: () => import('../views/example03/LocationView.vue')
-      },
-      {
-        path: 'orders',
-        component: () => import('../views/example03/OrderView.vue')
-      }
-    ]
   }
 ]
 

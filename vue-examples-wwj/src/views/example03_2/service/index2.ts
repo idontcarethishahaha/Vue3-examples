@@ -1,3 +1,4 @@
+// 网络数据（service 处理）
 import { getShopMock, listShopsMock } from '../data/dataSource2'
 import { useShopstore } from '../store/index2'
 

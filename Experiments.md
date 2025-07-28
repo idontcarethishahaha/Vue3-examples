@@ -1,9 +1,5 @@
-# Vite-Vue3
+# Experiments
 
-## 介绍
-这个仓库用于放置一些我写的vue实验
-
-## Experiments
 0. 实验一现在是我的总菜单
 1. 实验的代码在src/views下
 2. 实验的效果图在src/assets下
@@ -46,7 +42,7 @@ https://cn.vuejs.org/guide/essentials/class-and-style.html#binding-inline-styles
 按学期排序显式；右侧显式选择的课程也动态按学期排序。不要在视图实现排序
 查询数组排序sort()函数
 
-![输入图片说明](exp02.gif)
+![输入图片说明](vue-examples-wwj/src/assets/exp02.gif)
 
 ### 实验三 单一数据源实验
 #### 实验目的
@@ -86,7 +82,7 @@ order组件，显示订单详情
 Store中缓存，shop列表/shop详细列表/order列表
 实现支持从缓存:加载shop列表信息，加载指定shop详细信息，加载orders信息。
 
-![输入图片说明](exp03.gif)
+![输入图片说明](vue-examples-wwj/src/assets/exp03.gif)
 
 ### 实验四 网络请求实验
 #### 实验目的

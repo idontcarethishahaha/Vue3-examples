@@ -60,7 +60,6 @@ export const listShopsMock = async () => {
   })
 }
 
-//
 export const getShopMock = async (sid: string) => {
   return new Promise<Shops>(resolve => {
     setTimeout(() => {

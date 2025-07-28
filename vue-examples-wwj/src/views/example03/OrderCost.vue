@@ -16,7 +16,7 @@ const orderCountC = computed(() => ordersR.value.length)
 <template>
   <router-link to="/example03/orders" class="notice" v-if="orderCountC > 0">
     <span class="text">小计:</span>
-    <span class="total">¥{{ totalCostC }}</span>
+    <span class="total">¥{{ totalCostC.toFixed(2) }}</span>
     <span class="text">(点击查看订单详情)</span>
   </router-link>
 </template>

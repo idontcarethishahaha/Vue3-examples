@@ -6,7 +6,7 @@ import { getOrdersService, getShopService } from './service'
 
 const route = useRoute()
 const shopR = shallowRef<Shops>()
-const orders = getOrdersService()
+const orderS = getOrdersService()
 
 // 店铺数据
 getShopService(route.params.sid as string).then(shop => {
@@ -14,31 +14,27 @@ getShopService(route.params.sid as string).then(shop => {
 })
 
 // 添加商品
-const add = (item: Item) => {
-  const existingOrder = orders.value.find(o => o.item.id === item.id)
-  if (existingOrder) {
-    existingOrder.quantity++
+const addItem = (item: Item) => {
+  const order = orderS.value.find(o => o.item.id === item.id)
+  if (order) {
+    order.quantity++
   } else {
-    orders.value.push({ quantity: 1, item })
+    orderS.value.push({ quantity: 1, item: item })
   }
 }
 
 // 移除商品
-const remove = (item: Item) => {
-  const index = orders.value.findIndex(o => o.item.id === item.id)
-  if (index !== -1) {
-    if (orders.value[index].quantity > 1) {
-      orders.value[index].quantity--
-    } else {
-      orders.value.splice(index, 1)
-    }
+const removeItem = (item: Item) => {
+  const order = orderS.value.find(o => o.item.id === item.id)
+  if (order && --order.quantity === 0) {
+    orderS.value.splice(orderS.value.indexOf(order), 1)
   }
 }
 
 // 商品在订单中数量
-const orderQ = computed(() => (item: Item) => {
-  const order = orders.value.find(o => o.item.id === item.id)
-  return order?.quantity || 0
+const getItemQuantity = computed(() => (item: Item) => {
+  const order = orderS.value.find(o => o.item.id === item.id)
+  return order?.quantity ?? 0
 })
 </script>
 
@@ -52,9 +48,9 @@ const orderQ = computed(() => (item: Item) => {
         <p>价格：¥{{ item.price }}</p>
         <p>月销量：{{ item.sales }}</p>
         <div>
-          <button @click="remove(item)">-</button>
-          <span>{{ orderQ(item) }}</span>
-          <button @click="add(item)">+</button>
+          <button @click="removeItem(item)">-</button>
+          <span>{{ getItemQuantity(item) }}</span>
+          <button @click="addItem(item)">+</button>
         </div>
       </div>
     </div>

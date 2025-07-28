@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import IndexView from '../views/example03/IndexView.vue'
+import IndexView2 from '../views/example03_2/IndexView2.vue'
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
@@ -45,23 +46,23 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/example03_2',
-    component: IndexView,
+    component: IndexView2,
     children: [
       {
         path: '', // 默认子路由
-        component: () => import('../views/example03/ShopListView.vue')
+        component: () => import('../views/example03_2/ShopListView2.vue')
       },
       {
-        path: 'shops/:sid',
-        component: () => import('../views/example03/ShopView.vue')
+        path: 'shops2/:sid',
+        component: () => import('../views/example03_2/ShopView2.vue')
       },
       {
-        path: 'location',
-        component: () => import('../views/example03/LocationView.vue')
+        path: 'location2',
+        component: () => import('../views/example03_2/LocationView2.vue')
       },
       {
-        path: 'orders',
-        component: () => import('../views/example03/OrderView.vue')
+        path: 'orders2',
+        component: () => import('../views/example03_2/OrderView2.vue')
       }
     ]
   }

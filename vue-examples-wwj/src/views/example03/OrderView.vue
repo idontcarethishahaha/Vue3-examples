@@ -1,14 +1,16 @@
 <script lang="ts" setup>
-import { computed } from 'vue'
+//import { computed } from 'vue'
 import { getOrdersService } from './service'
-const ordersC = computed(() => getOrdersService().value)
+// 这里可以不使用computed，因为getOrdersService()返回的是一个ref对象，而ref对象本身就是响应式的
+//const ordersS = computed(() => getOrdersService().value)
+const ordersS = getOrdersService()
 </script>
 
 <template>
   <div class="container">
     <h2 class="title">我的订单</h2>
     <div class="list">
-      <div v-for="(o, index) of ordersC" :key="index" class="item">
+      <div v-for="(o, index) of ordersS" :key="index" class="item">
         <img v-if="o.item.img" :src="o.item.img" class="image" />
         <div>
           <h3>{{ o.item.name }}</h3>
@@ -17,7 +19,7 @@ const ordersC = computed(() => getOrdersService().value)
             <span>× {{ o.quantity }}</span>
           </div>
         </div>
-        <div class="total">¥{{ o.item.price * o.quantity }}</div>
+        <div class="total">¥{{ (o.item.price * o.quantity).toFixed(2) }}</div>
       </div>
     </div>
   </div>

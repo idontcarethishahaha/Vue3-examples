@@ -43,7 +43,6 @@ const routes: RouteRecordRaw[] = [
         component: () => import('../views/example03/OrderView.vue')
       }
     ]
-<<<<<<< HEAD
   },
   {
     path: '/example03_2',
@@ -66,8 +65,6 @@ const routes: RouteRecordRaw[] = [
         component: () => import('../views/example03_2/OrderView2.vue')
       }
     ]
-=======
->>>>>>> a39b6788de48059d029512e49b0a261281ac3312
   }
 ]
 

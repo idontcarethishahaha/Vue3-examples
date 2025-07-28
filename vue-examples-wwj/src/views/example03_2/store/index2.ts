@@ -1,3 +1,4 @@
+//本地数据（store 管理）
 import { ref, shallowRef } from 'vue'
 import type { Order, Shop } from '../data/dataSource2'
 
@@ -9,5 +10,7 @@ const clear = () => {
   shopMap.clear()
   ordersS.value = []
 }
+//唯一的 store 对象
 const store = { shopListS, shopMap, ordersS, clear }
+//每次调用时都返回同一个对象引用
 export const useShopstore = () => store

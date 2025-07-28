@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import type { Item, Shop } from '@/views/example03_2/data/dataSource2'
 import { shallowRef } from 'vue'
 import { useRoute } from 'vue-router'
@@ -42,6 +41,3 @@ export const getItemQuantity = (item: Item) => {
   const order = orderS.value.find(o => o.item.id === item.id)
   return order?.quantity || 0
 }
-=======
-//有问题
->>>>>>> a39b6788de48059d029512e49b0a261281ac3312

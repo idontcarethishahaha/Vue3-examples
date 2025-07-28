@@ -13,12 +13,11 @@ getShopService(params.sid as string).then(sh => {
 })
 */
 
+//函数，手动调用
 export const getShopData = () => {
-  // 在函数内部获取路由参数
-  const route = useRoute()
-  const sid = route.params.sid as string
+  const params = useRoute().params
 
-  return getShopService(sid).then(shop => {
+  return getShopService(params.sid as string).then(shop => {
     shopR.value = shop
     return shop
   })

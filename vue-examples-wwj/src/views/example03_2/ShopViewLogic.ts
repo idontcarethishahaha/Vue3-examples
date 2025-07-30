@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import type { Item, Shop } from '@/views/example03_2/data/dataSource2'
 import { shallowRef } from 'vue'
 import { useRoute } from 'vue-router'
@@ -14,12 +13,11 @@ getShopService(params.sid as string).then(sh => {
 })
 */
 
+//函数，手动调用
 export const getShopData = () => {
-  // 在函数内部获取路由参数
-  const route = useRoute()
-  const sid = route.params.sid as string
+  const params = useRoute().params
 
-  return getShopService(sid).then(shop => {
+  return getShopService(params.sid as string).then(shop => {
     shopR.value = shop
     return shop
   })
@@ -42,6 +40,3 @@ export const getItemQuantity = (item: Item) => {
   const order = orderS.value.find(o => o.item.id === item.id)
   return order?.quantity || 0
 }
-=======
-//有问题
->>>>>>> a39b6788de48059d029512e49b0a261281ac3312

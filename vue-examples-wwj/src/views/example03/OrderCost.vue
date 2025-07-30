@@ -1,8 +1,16 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useStore } from './store'
-
 const { ordersR } = useStore()
+/*
+//两种都能获取数据
+import { getOrdersService } from './service'
+const ordersR = getOrdersService()
+*/
+/*
+createGlobalState会自动推导返回值类型，解构时 TS 能直接关联类型
+能直接解构出 ordersR，无需手动声明类型
+ */
 
 // 订单总价
 const totalCostC = computed(() =>

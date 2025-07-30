@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { addItem, getItemQuantity, getShopData, removeItem, shopR } from './ShopViewLogic.ts'
 getShopData().then(shop => {
-  console.log('店铺数据加载完成', shop)
+  console.log('店铺数据加载完成~', shop)
 })
 </script>
 

@@ -68,7 +68,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/homework03',
-    component: () => import('../views/homework03/IndexView.vue')
+    component: () => import('../views/homework03/HomeworkView.vue')
   },
   {
     path: '/homework04',

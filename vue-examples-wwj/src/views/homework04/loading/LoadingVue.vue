@@ -6,7 +6,7 @@ onUnmounted(() => (document.body.style.overflow = ''))
 </script>
 <template>
   <div class="loading">
-    <img style="margin: 200px auto; display: block" src="@/assets/loading.gif" alt="" />
+    <img style="margin: 200px auto; display: block" src="@/assets/whitecat_3.gif" alt="" />
   </div>
 </template>
 <style scoped>
@@ -16,6 +16,7 @@ onUnmounted(() => (document.body.style.overflow = ''))
   position: fixed;
   top: 0;
   left: 0;
-  background: rgba(0, 0, 0, 0.2);
+  background: linear-gradient(135deg, rgba(172, 197, 248, 0.3), rgba(231, 168, 199, 0.3));
+  background-size: cover;
 }
 </style>

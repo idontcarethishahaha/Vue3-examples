@@ -5,7 +5,6 @@ export const listCoursesService = async (): Promise<Course[]> => {
     setTimeout(() => resolve(listCourses()), 4000)
   })
 }
-
 const listCourses = () => {
   const courses: Course[] = [
     { name: '移动终端设计', id: '15' },

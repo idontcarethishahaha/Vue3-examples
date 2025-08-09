@@ -1,12 +1,39 @@
-import { defineAsyncComponent, h, render } from 'vue'
+import { createApp, h } from 'vue'
+import LoadingVue from './LoadingVue.vue'
 
-export const createLoading = () => {
-  const loading = defineAsyncComponent(() => import('./LoadingVue.vue'))
-  const vnode = h(loading)
-  render(vnode, document.body)
-  // 封装关闭函数供外部显式调用
-  const close = () => {
-    render(null, document.body)
+// 1. 首先定义返回类型接口
+interface LoadingInstance {
+  close: () => void
+}
+
+// 2. 使用明确的类型替代ReturnType
+let loadingInstance: LoadingInstance | null = null
+
+export const createLoading = (): LoadingInstance => {
+  // 如果已存在实例，直接返回
+  if (loadingInstance) {
+    return loadingInstance
   }
-  return { close }
+
+  const container = document.createElement('div')
+  document.body.appendChild(container)
+
+  const app = createApp({
+    render() {
+      return h(LoadingVue)
+    }
+  })
+
+  const close = () => {
+    if (loadingInstance) {
+      app.unmount()
+      document.body.removeChild(container)
+      loadingInstance = null
+    }
+  }
+
+  app.mount(container)
+  loadingInstance = { close }
+
+  return loadingInstance
 }

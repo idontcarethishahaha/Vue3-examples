@@ -8,7 +8,6 @@ interface LoadingInstance {
 let loadingInstance: LoadingInstance | null = null
 
 export const createLoading = (): LoadingInstance => {
-  // 如果已存在实例，直接返回
   if (loadingInstance) {
     return loadingInstance
   }

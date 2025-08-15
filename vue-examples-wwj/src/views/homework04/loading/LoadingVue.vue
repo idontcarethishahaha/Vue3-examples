@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import loadingImage from '@/assets/whitecat_3.gif' // 确保路径正确
+import loadingImage from '@/assets/whitecat_3.gif'
 import { onMounted, ref } from 'vue'
 
 const dialogRef = ref<HTMLDialogElement | null>(null)
@@ -31,18 +31,16 @@ defineExpose({ close })
   left: 50%;
   transform: translate(-50%, -50%);
   margin: 0;
-  /* 缩小模态框宽度，可根据实际需求调整，比如改成 300px 等固定值 */
   width: 280px;
-  padding: 16px; /* 减少内边距，让模态框更紧凑 */
+  padding: 16px;
   border: none;
   border-radius: 8px;
   background-color: white;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.15); /* 阴影适度缩小，更精致 */
-  z-index: 9999;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
+  z-index: 20;
 }
 
 .loading-image {
-  /*width: 80px;*/
   height: 150px;
   display: block;
   margin: 0 auto 12px;
@@ -50,7 +48,6 @@ defineExpose({ close })
 
 .loading-text {
   text-align: center;
-  color: #333;
   margin: 0;
 }
 

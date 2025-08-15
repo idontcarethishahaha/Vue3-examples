@@ -73,6 +73,26 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/homework04',
     component: () => import('../views/homework04/IndexView.vue')
+  },
+  {
+    path: '/modaltest01',
+    component: () => import('../views/modaltest01/Example09_1.vue')
+  },
+  {
+    path: '/modaltest02',
+    component: () => import('../views/modaltest02/Example09_2.vue')
+  },
+  {
+    path: '/modaltest03',
+    component: () => import('../views/modaltest03/Example09_3.vue')
+  },
+  {
+    path: '/modaltest04',
+    component: () => import('../views/modaltest04/Example09_4.vue')
+  },
+  {
+    path: '/modaltest05',
+    component: () => import('../views/modaltest05/Example09_5.vue')
   }
 ]
 

@@ -1,36 +1,22 @@
-import { createApp, h } from 'vue'
-import LoadingVue from './LoadingVue.vue'
+import { defineAsyncComponent, h, render } from 'vue'
 
-interface LoadingInstance {
-  close: () => void
-}
+export const createLoading = () => {
+  // 异步导入 Loading 组件
+  const LoadingComponent = defineAsyncComponent(() => import('./LoadingVue.vue'))
+  const vnode = h(LoadingComponent)
 
-let loadingInstance: LoadingInstance | null = null
+  // 渲染到 body（或其他容器）
+  render(vnode, document.body)
 
-export const createLoading = (): LoadingInstance => {
-  if (loadingInstance) {
-    return loadingInstance
-  }
-
-  const container = document.createElement('div')
-  document.body.appendChild(container)
-
-  const app = createApp({
-    render() {
-      return h(LoadingVue)
-    }
-  })
-
+  // 获取组件实例，调用暴露的 close 方法
   const close = () => {
-    if (loadingInstance) {
-      app.unmount()
-      document.body.removeChild(container)
-      loadingInstance = null
+    const instance = vnode.component
+    if (instance) {
+      instance.exposed?.close()
     }
+    // 清空渲染
+    render(null, document.body)
   }
 
-  app.mount(container)
-  loadingInstance = { close }
-
-  return loadingInstance
+  return { close }
 }

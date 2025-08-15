@@ -1,8 +1,15 @@
 <template>
+<<<<<<< HEAD
   <dialog class="loading-modal" ref="dialogRef">
     <div class="loading-content">
       <img :src="loadingImage" alt="loading" class="loading-image" />
       <p class="loading-text">努力加载中...</p>
+=======
+  <div class="loading">
+    <div class="loading-content">
+      <img src="@/assets/whitecat_3.gif" alt="loading" class="loading-image" />
+      <p class="loading-text">加载中...</p>
+>>>>>>> 8cb4115fa6cd7edb43a37e1362f181d3ee016cfd
     </div>
   </dialog>
 </template>
@@ -27,6 +34,7 @@ defineExpose({ close })
 <style scoped>
 .loading-modal {
   position: fixed;
+<<<<<<< HEAD
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -46,15 +54,39 @@ defineExpose({ close })
   height: 150px;
   display: block;
   margin: 0 auto 12px;
+=======
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(135deg, rgba(172, 197, 248, 0.3), rgba(231, 168, 199, 0.3));
+  backdrop-filter: blur(2px);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+>>>>>>> 8cb4115fa6cd7edb43a37e1362f181d3ee016cfd
 }
 
-.loading-text {
+.loading-content {
   text-align: center;
   color: #333;
   margin: 0;
 }
 
+<<<<<<< HEAD
 .loading-modal::backdrop {
   background: linear-gradient(45deg, pink, lightblue);
+=======
+.loading-image {
+  width: 100px;
+  height: 100px;
+}
+
+.loading-text {
+  margin-top: 16px;
+  color: #333;
+  font-size: 16px;
+>>>>>>> 8cb4115fa6cd7edb43a37e1362f181d3ee016cfd
 }
 </style>

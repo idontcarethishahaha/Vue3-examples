@@ -52,6 +52,6 @@ defineExpose({ close })
 }
 
 .loading-modal::backdrop {
-  background: linear-gradient(45deg, pink, lightblue);
+  background: linear-gradient(45deg, rgba(255, 192, 203, 0.3), rgba(173, 216, 230, 0.3));
 }
 </style>

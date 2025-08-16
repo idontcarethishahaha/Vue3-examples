@@ -32,7 +32,11 @@ onUnmounted(() => {
   width: 100vw;
   height: 100vh;
   z-index: 20;
+<<<<<<< HEAD
   display: flex;
+=======
+  display: none;
+>>>>>>> 95cc14b173eb31928c5e517690b9994358862a16
   justify-content: center;
   align-items: center;
 }

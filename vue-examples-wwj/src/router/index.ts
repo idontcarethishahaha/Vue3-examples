@@ -93,6 +93,10 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/modaltest05',
     component: () => import('../views/modaltest05/Example09_5.vue')
+  },
+  {
+    path: '/modal',
+    component: () => import('../views/modal/IndexView.vue')
   }
 ]
 

@@ -1,29 +1,21 @@
 <script setup lang="ts">
 import loadingImage from '@/assets/whitecat_3.gif'
-import { onMounted, onUnmounted, ref } from 'vue'
-
-const isShowR = ref(true)
-const isMountedR = ref(false)
-
-const close = () => {
-  isShowR.value = false
-  document.body.style.overflow = ''
-}
+import { onMounted, onUnmounted } from 'vue'
 
 onMounted(() => {
-  isMountedR.value = true
+  /*当组件挂载到页面时，将body的overflow属性设为hidden，
+  隐藏滚动条，防止遮罩层下方页面内容滚动*/
   document.body.style.overflow = 'hidden'
 })
 
 onUnmounted(() => {
+  /*当组件从页面卸载时，清空body的overflow样式，允许页面重新滚动​​*/
   document.body.style.overflow = ''
 })
-
-defineExpose({ close })
 </script>
 
 <template>
-  <div class="loading-modal" :class="{ show: isShowR }" v-if="isMountedR">
+  <div class="loading-modal">
     <div class="loading-backdrop"></div>
     <div class="loading-content">
       <img :src="loadingImage" alt="loading" class="loading-image" />
@@ -39,14 +31,10 @@ defineExpose({ close })
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 2000;
-  display: none;
+  z-index: 20;
+  display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.loading-modal.show {
-  display: flex;
 }
 
 .loading-backdrop {

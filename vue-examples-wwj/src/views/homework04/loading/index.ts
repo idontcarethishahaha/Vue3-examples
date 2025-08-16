@@ -7,12 +7,7 @@ export const createLoading = () => {
   render(vnode, document.body)
 
   const close = () => {
-    const instance = vnode.component
-    if (instance) {
-      instance.exposed?.close()
-    }
     render(null, document.body)
   }
-
   return { close }
 }

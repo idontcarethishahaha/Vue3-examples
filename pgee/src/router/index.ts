@@ -6,7 +6,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect: '/login' // 默认重定向到登录页
+      redirect: '/login' //重定向到登录页
     },
     {
       path: '/login',
@@ -17,7 +17,7 @@ const router = createRouter({
       path: '/register',
       name: 'Register',
       component: () => import('@/views/RegisterView.vue')
-    }, // 超级管理员页面
+    }, //超级管理员页面
     {
       path: '/admin-colleges',
       name: 'AdminColleges',

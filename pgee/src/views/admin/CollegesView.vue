@@ -341,8 +341,8 @@ onMounted(() => {
 }
 
 .manage-btn {
-  background: #ffc107;
-  color: black;
+  background: rgb(12, 172, 235);
+  color: white;
   border: none;
   padding: 6px 12px;
   border-radius: 4px;
@@ -352,7 +352,7 @@ onMounted(() => {
 }
 
 .manage-btn:hover {
-  background: #e0a800;
+  background: rgb(12, 172, 235);
 }
 
 .delete-btn {

@@ -1,4 +1,4 @@
-import { usePost } from '@/api'
+import { usePost } from '@/axios'
 
 export interface LoginRequest {
   account: string

@@ -1,53 +1,6 @@
-<template>
-  <div class="login-container">
-    <div class="login-header">
-      <h1>推免系统</h1>
-      <p>欢迎登录，请填写您的账号信息</p>
-    </div>
-
-    <div v-if="errorMessage" class="alert alert-error">
-      {{ errorMessage }}
-    </div>
-
-    <form @submit.prevent="handleLogin">
-      <div class="form-group">
-        <label for="account">账号</label>
-        <input
-          v-model="form.account"
-          type="text"
-          id="account"
-          class="form-control"
-          placeholder="请输入账号"
-          required
-          ref="accountInput" />
-      </div>
-
-      <div class="form-group">
-        <label for="password">密码</label>
-        <input
-          v-model="form.password"
-          type="password"
-          id="password"
-          class="form-control"
-          placeholder="请输入密码"
-          required
-          @keypress.enter="handleLogin" />
-      </div>
-
-      <button type="submit" class="btn-login" :disabled="loading">
-        {{ loading ? '登录中...' : '登录' }}
-      </button>
-    </form>
-
-    <div class="register-link">
-      <router-link to="/register">学生注册</router-link>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
-import axios from '@/api'
 import type { LoginRequest } from '@/api/loginApi'
+import axios from '@/axios'
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -121,5 +74,52 @@ const handleLogin = async () => {
   }
 }
 </script>
+
+<template>
+  <div class="login-container">
+    <div class="login-header">
+      <h1>推免系统</h1>
+      <p>欢迎登录，请填写您的账号信息</p>
+    </div>
+
+    <div v-if="errorMessage" class="alert alert-error">
+      {{ errorMessage }}
+    </div>
+
+    <form @submit.prevent="handleLogin">
+      <div class="form-group">
+        <label for="account">账号</label>
+        <input
+          v-model="form.account"
+          type="text"
+          id="account"
+          class="form-control"
+          placeholder="请输入账号"
+          required
+          ref="accountInput" />
+      </div>
+
+      <div class="form-group">
+        <label for="password">密码</label>
+        <input
+          v-model="form.password"
+          type="password"
+          id="password"
+          class="form-control"
+          placeholder="请输入密码"
+          required
+          @keypress.enter="handleLogin" />
+      </div>
+
+      <button type="submit" class="btn-login" :disabled="loading">
+        {{ loading ? '登录中...' : '登录' }}
+      </button>
+    </form>
+
+    <div class="register-link">
+      <router-link to="/register">学生注册</router-link>
+    </div>
+  </div>
+</template>
 
 <style scoped></style>

@@ -1,65 +1,5 @@
-<template>
-  <div class="admin-container">
-    <div class="admin-header">
-      <h1>学院管理系统</h1>
-      <button @click="logout" class="logout-btn">退出登录</button>
-    </div>
-
-    <div class="toolbar">
-      <button @click="showAddCollegeModal" class="add-btn">添加学院</button>
-    </div>
-
-    <!--学院列表-->
-    <div class="college-list">
-      <table class="college-table">
-        <thead>
-          <tr>
-            <th>学院名称</th>
-            <th>创建时间</th>
-            <th>更新时间</th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="college of colleges" :key="college.id">
-            <td>{{ college.name }}</td>
-            <td>{{ formatDate(college.createTime) }}</td>
-            <td>{{ formatDate(college.updateTime) }}</td>
-            <td class="actions">
-              <button @click="editCollege(college)" class="edit-btn">编辑</button>
-              <button @click="manageAdmins(college)" class="manage-btn">管理管理员</button>
-              <button @click="removeCollege(college)" class="delete-btn">删除</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!--添加/编辑学院模态框-->
-    <div v-if="showModal" class="modal-overlay">
-      <div class="modal">
-        <div class="modal-header">
-          <h3>{{ isEditing ? '编辑学院' : '添加学院' }}</h3>
-          <button @click="closeModal" class="close-btn">×</button>
-        </div>
-        <div class="modal-body">
-          <input
-            v-model="collegeForm.name"
-            type="text"
-            placeholder="请输入学院名称"
-            class="form-input" />
-        </div>
-        <div class="modal-footer">
-          <button @click="closeModal" class="cancel-btn">取消</button>
-          <button @click="saveCollege" class="save-btn">保存</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
-import axios from '@/api'
+import axios from '@/axios'
 import type { AddCollegeRequest, College, UpdateCollegeRequest } from '@/types/admin'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -239,5 +179,65 @@ onMounted(() => {
   }
 })
 </script>
+
+<template>
+  <div class="admin-container">
+    <div class="admin-header">
+      <h1>学院管理系统</h1>
+      <button @click="logout" class="logout-btn">退出登录</button>
+    </div>
+
+    <div class="toolbar">
+      <button @click="showAddCollegeModal" class="add-btn">添加学院</button>
+    </div>
+
+    <!--学院列表-->
+    <div class="college-list">
+      <table class="college-table">
+        <thead>
+          <tr>
+            <th>学院名称</th>
+            <th>创建时间</th>
+            <th>更新时间</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="college of colleges" :key="college.id">
+            <td>{{ college.name }}</td>
+            <td>{{ formatDate(college.createTime) }}</td>
+            <td>{{ formatDate(college.updateTime) }}</td>
+            <td class="actions">
+              <button @click="editCollege(college)" class="edit-btn">编辑</button>
+              <button @click="manageAdmins(college)" class="manage-btn">管理管理员</button>
+              <button @click="removeCollege(college)" class="delete-btn">删除</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!--添加/编辑学院模态框-->
+    <div v-if="showModal" class="modal-overlay">
+      <div class="modal">
+        <div class="modal-header">
+          <h3>{{ isEditing ? '编辑学院' : '添加学院' }}</h3>
+          <button @click="closeModal" class="close-btn">×</button>
+        </div>
+        <div class="modal-body">
+          <input
+            v-model="collegeForm.name"
+            type="text"
+            placeholder="请输入学院名称"
+            class="form-input" />
+        </div>
+        <div class="modal-footer">
+          <button @click="closeModal" class="cancel-btn">取消</button>
+          <button @click="saveCollege" class="save-btn">保存</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
 
 <style scoped></style>

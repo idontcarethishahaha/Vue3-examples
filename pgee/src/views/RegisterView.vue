@@ -1,115 +1,5 @@
-<template>
-  <div class="register-container">
-    <div class="register-header">
-      <h1>学生注册</h1>
-    </div>
-
-    <div v-if="errorMessage" class="alert alert-error">
-      {{ errorMessage }}
-    </div>
-
-    <div v-if="successMessage" class="alert alert-success">
-      {{ successMessage }}
-    </div>
-
-    <form @submit.prevent="handleRegister">
-      <div class="form-group">
-        <label for="account">学号:</label>
-        <input
-          v-model="form.account"
-          type="text"
-          id="account"
-          class="form-control"
-          placeholder="请输入学号"
-          required />
-      </div>
-
-      <div class="form-group">
-        <label for="name">姓名:</label>
-        <input
-          v-model="form.name"
-          type="text"
-          id="name"
-          class="form-control"
-          placeholder="请输入姓名"
-          required />
-      </div>
-
-      <div class="form-group">
-        <label for="tel">电话:</label>
-        <input
-          v-model="form.tel"
-          type="tel"
-          id="tel"
-          class="form-control"
-          placeholder="请输入电话"
-          required />
-      </div>
-
-      <!--学院下拉框-->
-      <div class="form-group">
-        <label for="collegeSelect">学院:</label>
-        <select
-          v-model="selectedCollegeId"
-          id="collegeSelect"
-          class="form-control"
-          required
-          @change="loadMajors">
-          <option value="">请选择学院</option>
-          <option v-for="college of colleges" :key="college.id" :value="college.id">
-            {{ college.name }}
-          </option>
-        </select>
-      </div>
-
-      <!--专业下拉框-->
-      <div class="form-group">
-        <label for="majorSelect">专业:</label>
-        <select
-          v-model="selectedMajorId"
-          id="majorSelect"
-          class="form-control"
-          required
-          :disabled="!selectedCollegeId || majors.length === 0">
-          <option value="">
-            {{
-              !selectedCollegeId
-                ? '请先选择学院'
-                : majors.length === 0
-                  ? '该学院暂无专业'
-                  : '请选择专业'
-            }}
-          </option>
-          <option v-for="major of majors" :key="major.id" :value="major.id">
-            {{ major.name }}
-          </option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="password">密码:</label>
-        <input
-          v-model="form.password"
-          type="password"
-          id="password"
-          class="form-control"
-          placeholder="请输入密码"
-          required />
-      </div>
-
-      <button type="submit" class="btn-register" :disabled="loading">
-        {{ loading ? '注册中...' : '注册' }}
-      </button>
-    </form>
-
-    <div class="login-link">
-      <router-link to="/login">已有账号？立即登录</router-link>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
-import axios from '@/api'
+import axios from '@/axios'
 import type { College, Major, RegisterRequest } from '@/types'
 import { onMounted, reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
@@ -276,5 +166,115 @@ onMounted(() => {
   loadColleges()
 })
 </script>
+
+<template>
+  <div class="register-container">
+    <div class="register-header">
+      <h1>学生注册</h1>
+    </div>
+
+    <div v-if="errorMessage" class="alert alert-error">
+      {{ errorMessage }}
+    </div>
+
+    <div v-if="successMessage" class="alert alert-success">
+      {{ successMessage }}
+    </div>
+
+    <form @submit.prevent="handleRegister">
+      <div class="form-group">
+        <label for="account">学号:</label>
+        <input
+          v-model="form.account"
+          type="text"
+          id="account"
+          class="form-control"
+          placeholder="请输入学号"
+          required />
+      </div>
+
+      <div class="form-group">
+        <label for="name">姓名:</label>
+        <input
+          v-model="form.name"
+          type="text"
+          id="name"
+          class="form-control"
+          placeholder="请输入姓名"
+          required />
+      </div>
+
+      <div class="form-group">
+        <label for="tel">电话:</label>
+        <input
+          v-model="form.tel"
+          type="tel"
+          id="tel"
+          class="form-control"
+          placeholder="请输入电话"
+          required />
+      </div>
+
+      <!--学院下拉框-->
+      <div class="form-group">
+        <label for="collegeSelect">学院:</label>
+        <select
+          v-model="selectedCollegeId"
+          id="collegeSelect"
+          class="form-control"
+          required
+          @change="loadMajors">
+          <option value="">请选择学院</option>
+          <option v-for="college of colleges" :key="college.id" :value="college.id">
+            {{ college.name }}
+          </option>
+        </select>
+      </div>
+
+      <!--专业下拉框-->
+      <div class="form-group">
+        <label for="majorSelect">专业:</label>
+        <select
+          v-model="selectedMajorId"
+          id="majorSelect"
+          class="form-control"
+          required
+          :disabled="!selectedCollegeId || majors.length === 0">
+          <option value="">
+            {{
+              !selectedCollegeId
+                ? '请先选择学院'
+                : majors.length === 0
+                  ? '该学院暂无专业'
+                  : '请选择专业'
+            }}
+          </option>
+          <option v-for="major of majors" :key="major.id" :value="major.id">
+            {{ major.name }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="password">密码:</label>
+        <input
+          v-model="form.password"
+          type="password"
+          id="password"
+          class="form-control"
+          placeholder="请输入密码"
+          required />
+      </div>
+
+      <button type="submit" class="btn-register" :disabled="loading">
+        {{ loading ? '注册中...' : '注册' }}
+      </button>
+    </form>
+
+    <div class="login-link">
+      <router-link to="/login">已有账号？立即登录</router-link>
+    </div>
+  </div>
+</template>
 
 <style scoped></style>

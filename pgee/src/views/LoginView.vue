@@ -48,7 +48,7 @@
 <script setup lang="ts">
 import axios from '@/api'
 import type { LoginRequest } from '@/api/loginApi'
-import { onMounted, reactive, ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -79,36 +79,33 @@ const handleLogin = async () => {
     console.log('登录响应:', response)
 
     if (response.data.code === 200) {
-      // 从响应头获取token和role
       const token = response.headers.token
       const role = response.headers.role
 
       console.log('登录成功:', { token, role })
 
       if (!token) {
-        errorMessage.value = '登录失败：未获取到token'
+        errorMessage.value = '登录失败:未获取到token'
         return
       }
 
-      // 保存到localStorage
       localStorage.setItem('token', token)
       localStorage.setItem('role', role)
       localStorage.setItem('user', JSON.stringify(response.data.data))
 
       console.log('用户信息已保存到localStorage')
 
-      // 根据角色跳转到不同页面
       switch (role) {
-        case 'Fr5g': // 超级管理员
+        case 'Fr5g':
           await router.push('/admin-colleges')
           break
-        case 'yHJ7': // 学院管理员
-          await router.push('/collegeadmin-dashboard')
+        case 'yHJ7':
+          await router.push('/collegeadmin-welcome')
           break
-        case 'Ca24': // 辅导员
+        case 'Ca24':
           await router.push('/counselor-welcome')
           break
-        case 'dA5q': // 学生
+        case 'dA5q':
           await router.push('/student-welcome')
           break
         default:
@@ -117,121 +114,12 @@ const handleLogin = async () => {
     } else {
       errorMessage.value = response.data.message || '登录失败'
     }
-  } catch (error: unknown) {
-    console.error('登录错误:', error)
-    if (error instanceof Error) {
-      errorMessage.value = error.message || '登录失败，请检查网络连接'
-    } else {
-      errorMessage.value = '登录失败，请检查网络连接'
-    }
+  } catch {
+    errorMessage.value = '登录失败，请检查网络连接'
   } finally {
     loading.value = false
   }
 }
-
-onMounted(() => {
-  // 自动聚焦到账号输入框
-  if (accountInput.value) {
-    accountInput.value.focus()
-  }
-})
 </script>
 
-<style scoped>
-.login-container {
-  background: white;
-  padding: 40px;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  width: 400px;
-  margin: 100px auto;
-}
-
-.login-header {
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-.login-header h1 {
-  color: #333;
-  font-size: 28px;
-  margin-bottom: 10px;
-}
-
-.login-header p {
-  color: #666;
-  font-size: 14px;
-}
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 8px;
-  color: #333;
-  font-weight: 500;
-}
-
-.form-control {
-  width: 100%;
-  padding: 12px 15px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 14px;
-  transition: border-color 0.3s;
-}
-
-.form-control:focus {
-  border-color: #409eff;
-  outline: none;
-}
-
-.btn-login {
-  width: 100%;
-  padding: 12px;
-  background: #409eff;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.btn-login:hover:not(:disabled) {
-  background: #337ecc;
-}
-
-.btn-login:disabled {
-  background: #a0cfff;
-  cursor: not-allowed;
-}
-
-.alert {
-  padding: 12px;
-  border-radius: 6px;
-  margin-bottom: 20px;
-}
-
-.alert-error {
-  background: #fee;
-  border: 1px solid #f5c6cb;
-  color: #721c24;
-}
-
-.register-link {
-  text-align: center;
-  margin-top: 15px;
-}
-
-.register-link a {
-  color: #409eff;
-  text-decoration: none;
-}
-
-.register-link a:hover {
-  text-decoration: underline;
-}
-</style>
+<style scoped></style>

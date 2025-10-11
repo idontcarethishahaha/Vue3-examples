@@ -30,8 +30,8 @@ const router = createRouter({
     },
     //学院管理员页面
     {
-      path: '/collegeadmin-dashboard',
-      name: 'CollegeAdminDashboard',
+      path: '/collegeadmin-welcome',
+      name: 'CollegeAdminWelcome',
       component: () => import('@/views/collegeadmin/CollegeAdminWelcome.vue')
     },
     //辅导员页面

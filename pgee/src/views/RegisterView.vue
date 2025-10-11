@@ -1,7 +1,7 @@
 <template>
   <div class="register-container">
     <div class="register-header">
-      <h2>学生注册</h2>
+      <h1>学生注册</h1>
     </div>
 
     <div v-if="errorMessage" class="alert alert-error">
@@ -56,7 +56,7 @@
           required
           @change="loadMajors">
           <option value="">请选择学院</option>
-          <option v-for="college in colleges" :key="college.id" :value="college.id">
+          <option v-for="college of colleges" :key="college.id" :value="college.id">
             {{ college.name }}
           </option>
         </select>
@@ -80,7 +80,7 @@
                   : '请选择专业'
             }}
           </option>
-          <option v-for="major in majors" :key="major.id" :value="major.id">
+          <option v-for="major of majors" :key="major.id" :value="major.id">
             {{ major.name }}
           </option>
         </select>
@@ -184,7 +184,7 @@ const loadMajors = async () => {
   }
 
   try {
-    console.log('开始加载专业列表，学院ID:', selectedCollegeId.value)
+    console.log('开始加载专业列表,学院ID:', selectedCollegeId.value)
 
     const response = await axios.get(`/open/colleges/${selectedCollegeId.value}/majors`)
     console.log('专业列表响应:', response.data)
@@ -249,7 +249,7 @@ const handleRegister = async () => {
     console.log('注册响应:', response.data)
 
     if (response.data.code === 200) {
-      successMessage.value = '注册成功！3秒后跳转到登录页面...'
+      successMessage.value = '注册成功!3秒后跳转到登录页面...'
 
       //3秒后跳转到登录页面
       setTimeout(() => {
@@ -277,119 +277,4 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
-.register-container {
-  background: white;
-  padding: 40px;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  width: 450px;
-  margin: 20px auto;
-  max-height: 90vh;
-  overflow-y: auto;
-}
-
-.register-header {
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-.register-header h1 {
-  color: #333;
-  font-size: 28px;
-  margin-bottom: 10px;
-}
-
-.register-header p {
-  color: #666;
-  font-size: 16px;
-}
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 8px;
-  color: #333;
-  font-weight: 500;
-}
-
-.form-control {
-  width: 100%;
-  padding: 12px 15px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 14px;
-  transition: border-color 0.3s;
-}
-
-.form-control:focus {
-  border-color: #409eff;
-  outline: none;
-}
-
-select.form-control {
-  cursor: pointer;
-}
-
-select.form-control:disabled {
-  background-color: #f5f5f5;
-  cursor: not-allowed;
-}
-
-.btn-register {
-  width: 100%;
-  padding: 12px;
-  background: #67c23a;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  margin-top: 10px;
-}
-
-.btn-register:hover:not(:disabled) {
-  background: #5daf34;
-}
-
-.btn-register:disabled {
-  background: #b3e19d;
-  cursor: not-allowed;
-}
-
-.alert {
-  padding: 12px;
-  border-radius: 6px;
-  margin-bottom: 20px;
-}
-
-.alert-error {
-  background: #fee;
-  border: 1px solid #f5c6cb;
-  color: #721c24;
-}
-
-.alert-success {
-  background: #e7f7ed;
-  border: 1px solid #c3e6cb;
-  color: #155724;
-}
-
-.login-link {
-  text-align: center;
-  margin-top: 20px;
-}
-
-.login-link a {
-  color: #409eff;
-  text-decoration: none;
-}
-
-.login-link a:hover {
-  text-decoration: underline;
-}
-</style>
+<style scoped></style>

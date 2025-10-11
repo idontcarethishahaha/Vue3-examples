@@ -5,20 +5,11 @@
       <button @click="logout" class="logout-btn">退出登录</button>
     </div>
 
-    <!-- 搜索和添加区域 -->
     <div class="toolbar">
-      <div class="search-box">
-        <input
-          v-model="searchKeyword"
-          type="text"
-          placeholder="搜索学院名称..."
-          class="search-input"
-          @input="handleSearch" />
-      </div>
       <button @click="showAddCollegeModal" class="add-btn">添加学院</button>
     </div>
 
-    <!-- 学院列表 -->
+    <!--学院列表-->
     <div class="college-list">
       <table class="college-table">
         <thead>
@@ -30,21 +21,21 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="college in filteredColleges" :key="college.id">
+          <tr v-for="college of colleges" :key="college.id">
             <td>{{ college.name }}</td>
             <td>{{ formatDate(college.createTime) }}</td>
             <td>{{ formatDate(college.updateTime) }}</td>
             <td class="actions">
               <button @click="editCollege(college)" class="edit-btn">编辑</button>
               <button @click="manageAdmins(college)" class="manage-btn">管理管理员</button>
-              <button @click="deleteCollege(college)" class="delete-btn">删除</button>
+              <button @click="removeCollege(college)" class="delete-btn">删除</button>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <!-- 添加/编辑学院模态框 -->
+    <!--添加/编辑学院模态框-->
     <div v-if="showModal" class="modal-overlay">
       <div class="modal">
         <div class="modal-header">
@@ -70,33 +61,18 @@
 <script setup lang="ts">
 import axios from '@/api'
 import type { AddCollegeRequest, College, UpdateCollegeRequest } from '@/types/admin'
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
 const colleges = ref<College[]>([])
-const searchKeyword = ref('')
 const showModal = ref(false)
 const isEditing = ref(false)
 const collegeForm = ref({
   id: '',
   name: ''
 })
-
-//搜索
-const filteredColleges = computed(() => {
-  if (!searchKeyword.value) return colleges.value
-  return colleges.value.filter(college =>
-    college.name.toLowerCase().includes(searchKeyword.value.toLowerCase())
-  )
-})
-
-//搜索处理
-const handleSearch = (): void => {
-  // 计算属性自动处理搜索
-  console.log('搜索关键词:', searchKeyword.value)
-}
 
 //检查登录状态
 const checkLogin = (): boolean => {
@@ -109,7 +85,7 @@ const checkLogin = (): boolean => {
   })
 
   if (!token) {
-    console.log('未找到token，跳转到登录页')
+    console.log('未找到token,跳转到登录页')
     router.push('/login')
     return false
   }
@@ -202,7 +178,7 @@ const saveCollege = async (): Promise<void> => {
 }
 
 //删除学院
-const deleteCollege = async (college: College): Promise<void> => {
+const removeCollege = async (college: College): Promise<void> => {
   if (!confirm(`确定要删除学院 "${college.name}" 吗？此操作不可恢复！`)) {
     return
   }
@@ -264,223 +240,4 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
-.admin-container {
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.admin-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.admin-header h1 {
-  color: #333;
-  font-size: 24px;
-  margin: 0;
-}
-
-.toolbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.search-input,
-.form-input {
-  padding: 10px 12px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  width: 300px;
-  font-size: 14px;
-}
-
-.search-input:focus,
-.form-input:focus {
-  border-color: #409eff;
-  outline: none;
-}
-
-.add-btn,
-.save-btn {
-  background: #409eff;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.3s;
-}
-
-.add-btn:hover,
-.save-btn:hover {
-  background: #337ecc;
-}
-
-.edit-btn {
-  background: #28a745;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-right: 5px;
-  font-size: 12px;
-}
-
-.edit-btn:hover {
-  background: #218838;
-}
-
-.manage-btn {
-  background: rgb(12, 172, 235);
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-right: 5px;
-  font-size: 12px;
-}
-
-.manage-btn:hover {
-  background: rgb(12, 172, 235);
-}
-
-.delete-btn {
-  background: #dc3545;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 12px;
-}
-
-.delete-btn:hover {
-  background: #c82333;
-}
-
-.logout-btn,
-.cancel-btn {
-  background: #6c757d;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.3s;
-}
-
-.logout-btn:hover,
-.cancel-btn:hover {
-  background: #545b62;
-}
-
-.college-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: white;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.college-table th,
-.college-table td {
-  border: 1px solid #e0e0e0;
-  padding: 12px;
-  text-align: left;
-}
-
-.college-table th {
-  background: #f8f9fa;
-  font-weight: 600;
-  color: #333;
-}
-
-.college-table tr:hover {
-  background: #f5f5f5;
-}
-
-.actions {
-  display: flex;
-  gap: 5px;
-  flex-wrap: wrap;
-}
-
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.modal {
-  background: white;
-  border-radius: 8px;
-  width: 400px;
-  max-width: 90%;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.modal-header h3 {
-  margin: 0;
-  color: #333;
-}
-
-.modal-body {
-  padding: 20px;
-}
-
-.modal-footer {
-  padding: 20px;
-  border-top: 1px solid #e0e0e0;
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-}
-
-.close-btn {
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: #666;
-  padding: 0;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.close-btn:hover {
-  color: #333;
-  background: #f5f5f5;
-  border-radius: 50%;
-}
-</style>
+<style scoped></style>

@@ -3,82 +3,93 @@ import axios from 'axios'
 
 axios.defaults.baseURL = '/api/'
 
-//请求拦截器,添加 token
+//axios请求拦截器
 axios.interceptors.request.use(req => {
-  const token = localStorage.getItem('token')
-  if (token && req.headers) {
-    req.headers.token = token
+  //将token保存到localStorage的操作写在LoginView.vue里
+  //从localStorage读取token
+  //localStorage持久化，页面关闭后token仍然存在
+  const auth = localStorage.getItem('token')
+  if (auth && req.headers) {
+    req.headers.token = auth //添加到请求头
+    //通过拦截器自动添加到每个请求
   }
   return req
 })
 
-//响应拦截器
+const parseObject = <T>(data: T): T => {
+  if (data === null || data === undefined) {
+    return data
+  }
+
+  if (typeof data === 'object') {
+    if (Array.isArray(data)) {
+      return data.map(item => parseObject(item)) as T
+    }
+
+    //处理普通对象
+    const obj = data as Record<string, unknown>
+    for (const [key, value] of Object.entries(obj)) {
+      if (Array.isArray(value)) {
+        obj[key] = value.map(item => parseObject(item))
+      } else if (typeof value === 'object' && value !== null) {
+        obj[key] = parseObject(value)
+      } else if (typeof value === 'string' && (value.includes('{"') || value.includes('['))) {
+        try {
+          const parsed = JSON.parse(value)
+          obj[key] = parseObject(parsed)
+        } catch {
+          //解析失败则保持原值
+        }
+      }
+    }
+    return obj as T
+  }
+
+  return data
+}
+
 axios.interceptors.response.use(async resp => {
-  //处理blob响应类型
   if (resp.config.responseType === 'blob' && !resp.headers['content-disposition']) {
     const text = await resp.data.text()
-    throw new Error(JSON.parse(text).message)
+    return Promise.reject(new Error(JSON.parse(text).message))
   }
 
   const data = resp.data as ResultVO
 
+  if (data.code < 300) {
+    resp.data = parseObject(resp.data)
+    return resp
+  }
+
   if (data.code >= 400) {
-    throw new Error(data.message)
+    return Promise.reject(new Error(data.message))
   }
-
-  //解析json
-  const parseData = <T>(obj: T): T => {
-    if (obj === null || obj === undefined) {
-      return obj
-    }
-
-    if (Array.isArray(obj)) {
-      return obj.map(item => parseData(item)) as T
-    }
-
-    if (typeof obj === 'object') {
-      const result: Record<string, unknown> = {}
-      for (const [key, value] of Object.entries(obj)) {
-        result[key] = parseData(value)
-      }
-      return result as T
-    }
-
-    if (typeof obj === 'string') {
-      try {
-        const parsed = JSON.parse(obj)
-        return parseData(parsed)
-      } catch {
-        return obj
-      }
-    }
-
-    return obj
-  }
-
-  resp.data = parseData(resp.data)
   return resp
 })
 
-//HTTP请求
-export const useGet = <T>(url: string): Promise<T> => {
-  return axios.get<ResultVO<T>>(url).then(res => res.data.data)
+export const useGet = async <T>(url: string): Promise<T> => {
+  const resp = await axios.get<ResultVO<T>>(url)
+  return resp.data.data
 }
 
-export const usePost = <T>(url: string, data?: unknown): Promise<T> => {
-  return axios.post<ResultVO<T>>(url, data).then(res => res.data.data)
+export const usePost = async <T>(url: string, data: unknown): Promise<T> => {
+  const resp = await axios.post<ResultVO<T>>(url, data)
+  return resp.data.data
 }
 
-export const usePut = <T>(url: string, data?: unknown): Promise<T> => {
-  return axios.put<ResultVO<T>>(url, data).then(res => res.data.data)
+export const usePut = async <T>(url: string): Promise<T> => {
+  const resp = await axios.put<ResultVO<T>>(url)
+  return resp.data.data
 }
 
-export const usePatch = <T>(url: string, data?: unknown): Promise<T> => {
-  return axios.patch<ResultVO<T>>(url, data).then(res => res.data.data)
+export const usePatch = async <T>(url: string, data: unknown): Promise<T> => {
+  const resp = await axios.patch<ResultVO<T>>(url, data)
+  return resp.data.data
 }
 
-export const useDelete = <T>(url: string): Promise<T> => {
-  return axios.delete<ResultVO<T>>(url).then(res => res.data.data)
+export const useDelete = async <T>(url: string): Promise<T> => {
+  const resp = await axios.delete<ResultVO<T>>(url)
+  return resp.data.data
 }
 
 export default axios

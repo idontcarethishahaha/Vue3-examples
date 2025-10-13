@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import type { LoginRequest } from '@/api/loginApi'
-import axios from '@/axios'
-import { reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { createMessageDialog } from '@/components/message'
+import { UserService } from '@/services'
+import type { LoginRequest } from '@/types'
+import { onMounted, reactive, ref } from 'vue'
 
-const router = useRouter()
 const loading = ref(false)
-const errorMessage = ref('')
 const accountInput = ref<HTMLInputElement>()
 
 const form = reactive<LoginRequest>({
@@ -14,65 +12,35 @@ const form = reactive<LoginRequest>({
   password: ''
 })
 
+// 登录提交
 const handleLogin = async () => {
-  if (!form.account.trim() || !form.password.trim()) {
-    errorMessage.value = '请输入账号和密码'
+  // 表单验证
+  const validation = UserService.validateLoginForm(form)
+  if (!validation.isValid) {
+    createMessageDialog(validation.message)
     return
   }
 
-  errorMessage.value = ''
   loading.value = true
 
   try {
-    const response = await axios.post('/open/login', {
-      account: form.account,
-      password: form.password
+    await UserService.loginService({
+      account: form.account.trim(),
+      password: form.password.trim()
     })
-
-    console.log('登录响应:', response)
-
-    if (response.data.code === 200) {
-      const token = response.headers.token
-      const role = response.headers.role
-
-      console.log('登录成功:', { token, role })
-
-      if (!token) {
-        errorMessage.value = '登录失败:未获取到token'
-        return
-      }
-
-      localStorage.setItem('token', token)
-      localStorage.setItem('role', role)
-      localStorage.setItem('user', JSON.stringify(response.data.data))
-
-      console.log('用户信息已保存到localStorage')
-
-      switch (role) {
-        case 'Fr5g':
-          await router.push('/admin-colleges')
-          break
-        case 'yHJ7':
-          await router.push('/collegeadmin-welcome')
-          break
-        case 'Ca24':
-          await router.push('/counselor-welcome')
-          break
-        case 'dA5q':
-          await router.push('/student-welcome')
-          break
-        default:
-          errorMessage.value = '未知用户角色: ' + role
-      }
-    } else {
-      errorMessage.value = response.data.message || '登录失败'
-    }
-  } catch {
-    errorMessage.value = '登录失败，请检查网络连接'
+    // 登录成功后的跳转在 UserService 中处理
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : '登录失败，请检查网络连接'
+    createMessageDialog(message)
   } finally {
     loading.value = false
   }
 }
+
+// 页面加载时聚焦账号输入框
+onMounted(() => {
+  accountInput.value?.focus()
+})
 </script>
 
 <template>
@@ -80,10 +48,6 @@ const handleLogin = async () => {
     <div class="login-header">
       <h1>推免系统</h1>
       <p>欢迎登录，请填写您的账号信息</p>
-    </div>
-
-    <div v-if="errorMessage" class="alert alert-error">
-      {{ errorMessage }}
     </div>
 
     <form @submit.prevent="handleLogin">

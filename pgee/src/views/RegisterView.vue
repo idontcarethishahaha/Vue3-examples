@@ -10,16 +10,16 @@ const errorMessage = ref('')
 const successMessage = ref('')
 const colleges = ref<College[]>([])
 const majors = ref<Major[]>([])
-const selectedCollegeId = ref<number | ''>('')
-const selectedMajorId = ref<number | ''>('')
+const selectedCollegeId = ref<string | ''>('')
+const selectedMajorId = ref<string | ''>('')
 
 const form = reactive<RegisterRequest>({
   account: '',
   name: '',
   tel: '',
   password: '',
-  collegeId: 0,
-  majorId: 0
+  collegeId: '',
+  majorId: ''
 })
 
 //监听学院选择
@@ -27,7 +27,7 @@ watch(selectedCollegeId, newCollegeId => {
   if (newCollegeId) {
     form.collegeId = newCollegeId
   } else {
-    form.collegeId = 0
+    form.collegeId = ''
     selectedMajorId.value = ''
   }
 })
@@ -37,7 +37,7 @@ watch(selectedMajorId, newMajorId => {
   if (newMajorId) {
     form.majorId = newMajorId
   } else {
-    form.majorId = 0
+    form.majorId = ''
   }
 })
 
@@ -100,8 +100,9 @@ const loadMajors = async () => {
 
 //注册提交
 const handleRegister = async () => {
-  //验证表单
+  //检查用户是否填写了所有必填字段
   if (
+    //用trim()去除空格，以免输入的空格被误认为有效内容
     !form.account.trim() ||
     !form.name.trim() ||
     !form.tel.trim() ||
@@ -113,10 +114,10 @@ const handleRegister = async () => {
     return
   }
 
-  //验证电话格式
+  //用正则表达式验证电话格式
   const telRegex = /^1[3-9]\d{9}$/
   if (!telRegex.test(form.tel)) {
-    errorMessage.value = '请输入正确的手机号码'
+    errorMessage.value = '请输入正确格式的手机号'
     return
   }
 
@@ -139,12 +140,12 @@ const handleRegister = async () => {
     console.log('注册响应:', response.data)
 
     if (response.data.code === 200) {
-      successMessage.value = '注册成功!3秒后跳转到登录页面...'
+      successMessage.value = '注册成功!进入登录页面...'
 
-      //3秒后跳转到登录页面
+      //2秒后跳转到登录页面
       setTimeout(() => {
         router.push('/login')
-      }, 3000)
+      }, 2000)
     } else {
       errorMessage.value = '注册失败: ' + (response.data.message || '未知错误')
     }
@@ -160,7 +161,7 @@ const handleRegister = async () => {
   }
 }
 
-//页面加载时加载学院
+//页面加载时加载学院数据
 onMounted(() => {
   console.log('页面加载完成，开始加载学院数据...')
   loadColleges()

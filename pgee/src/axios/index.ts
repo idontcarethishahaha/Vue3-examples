@@ -16,6 +16,7 @@ axios.interceptors.request.use(req => {
   return req
 })
 
+//递归实现反序列化为js对象
 const parseObject = <T>(data: T): T => {
   if (data === null || data === undefined) {
     return data

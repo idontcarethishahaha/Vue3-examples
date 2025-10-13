@@ -1,19 +1,46 @@
 // services/CollegeService.ts
 import axios from '@/axios'
+import { createMessageDialog } from '@/components/message'
+import { useCollegeStore } from '@/stores/CollegeStore'
 import type { College, ResultVO } from '@/types'
 import type { AddCollegeRequest, UpdateCollegeRequest } from '@/types/admin'
+import { CommonService } from './CommonService'
+
+const collegeStore = useCollegeStore()
 
 export class CollegeService {
-  // 确保有 export
   /**
-   * 获取所有学院列表
+   * 初始化学院管理（包含权限检查和数据加载）
    */
-  static async getColleges(): Promise<College[]> {
-    const response = await axios.get<ResultVO<College[]>>('/admin/colleges')
-    if (response.data.code === 200) {
-      return response.data.data || []
+  static async initCollegeManagement(): Promise<boolean> {
+    console.log('组件挂载，开始检查登录状态...')
+    if (!CommonService.checkAdminLogin()) {
+      return false
     }
-    throw new Error(response.data.message || '加载学院列表失败')
+
+    console.log('登录状态验证通过，开始加载学院列表...')
+    await this.loadColleges()
+    return true
+  }
+
+  /**
+   * 加载学院列表
+   */
+  static async loadColleges(): Promise<void> {
+    try {
+      console.log('开始加载学院列表...')
+      const response = await axios.get<ResultVO<College[]>>('/admin/colleges')
+
+      if (response.data.code === 200) {
+        collegeStore.setColleges(response.data.data || [])
+        console.log('成功加载学院数量:', collegeStore.collegesS.value.length)
+      } else {
+        throw new Error(response.data.message || '加载学院列表失败')
+      }
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : '加载学院列表失败'
+      createMessageDialog(message)
+    }
   }
 
   /**
@@ -24,6 +51,8 @@ export class CollegeService {
     if (response.data.code !== 200) {
       throw new Error(response.data.message || '添加学院失败')
     }
+    createMessageDialog('添加成功')
+    await this.loadColleges() // 重新加载以获取完整信息
   }
 
   /**
@@ -34,15 +63,29 @@ export class CollegeService {
     if (response.data.code !== 200) {
       throw new Error(response.data.message || '更新学院失败')
     }
+    collegeStore.updateCollege(collegeId, { name: collegeData.name })
+    createMessageDialog('更新成功')
   }
 
   /**
    * 删除学院
    */
-  static async deleteCollege(collegeId: string): Promise<void> {
-    const response = await axios.delete<ResultVO<void>>(`/admin/colleges/${collegeId}`)
-    if (response.data.code !== 200) {
-      throw new Error(response.data.message || '删除学院失败')
+  static async deleteCollege(college: College): Promise<void> {
+    const confirmed = await this.confirmAction(
+      `确定要删除学院 "${college.name}" 吗？此操作不可恢复！`
+    )
+    if (!confirmed) return
+
+    try {
+      const response = await axios.delete<ResultVO<void>>(`/admin/colleges/${college.id}`)
+      if (response.data.code !== 200) {
+        throw new Error(response.data.message || '删除学院失败')
+      }
+      collegeStore.removeCollege(college.id)
+      createMessageDialog('删除成功')
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : '删除学院失败'
+      createMessageDialog(message)
     }
   }
 
@@ -54,5 +97,12 @@ export class CollegeService {
       return { isValid: false, message: '请输入学院名称' }
     }
     return { isValid: true, message: '' }
+  }
+
+  /**
+   * 确认对话框
+   */
+  private static confirmAction(message: string): Promise<boolean> {
+    return Promise.resolve(window.confirm(message))
   }
 }

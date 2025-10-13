@@ -205,7 +205,7 @@ onMounted(() => {
             </tr>
           </thead>
           <tbody>
-            <tr v-for="admin in filteredAdmins" :key="admin.id">
+            <tr v-for="admin of filteredAdmins" :key="admin.id">
               <td>{{ admin.name || '-' }}</td>
               <td>{{ admin.account }}</td>
               <td>{{ admin.tel || '-' }}</td>
@@ -224,7 +224,6 @@ onMounted(() => {
 
         <!-- 空状态 -->
         <div v-else class="empty-state">
-          <div>📋</div>
           <h3>暂无管理员</h3>
           <p>当前学院还没有管理员，点击"添加管理员"按钮来添加</p>
         </div>

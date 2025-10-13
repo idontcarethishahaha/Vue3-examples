@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import axios from '@/axios'
+import { createMessageDialog } from '@/components/message'
+import { StudentService } from '@/services'
 import type { College, Major, RegisterRequest } from '@/types'
 import { onMounted, reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
@@ -22,102 +23,51 @@ const form = reactive<RegisterRequest>({
   majorId: ''
 })
 
-//监听学院选择
-watch(selectedCollegeId, newCollegeId => {
+// 监听学院选择
+watch(selectedCollegeId, async newCollegeId => {
   if (newCollegeId) {
     form.collegeId = newCollegeId
+    await loadMajors(newCollegeId)
   } else {
     form.collegeId = ''
     selectedMajorId.value = ''
+    majors.value = []
   }
 })
 
-//监听专业选择
+// 监听专业选择
 watch(selectedMajorId, newMajorId => {
-  if (newMajorId) {
-    form.majorId = newMajorId
-  } else {
-    form.majorId = ''
-  }
+  form.majorId = newMajorId || ''
 })
 
-//加载学院列表
+// 加载学院列表
 const loadColleges = async () => {
   try {
-    console.log('开始加载学院列表...')
-
-    const response = await axios.get('/open/colleges')
-    console.log('学院列表响应:', response.data)
-
-    if (response.data.code === 200) {
-      colleges.value = response.data.data || []
-      console.log('学院列表加载完成')
-    } else {
-      errorMessage.value = '加载学院列表失败: ' + (response.data.message || '未知错误')
-    }
+    colleges.value = await StudentService.getColleges()
   } catch (error: unknown) {
-    console.error('加载学院列表失败:', error)
-    if (error instanceof Error) {
-      errorMessage.value = '加载学院列表失败: ' + error.message
-    } else {
-      errorMessage.value = '加载学院列表失败: 网络错误'
-    }
+    const message = error instanceof Error ? error.message : '加载学院列表失败'
+    createMessageDialog(message)
   }
 }
 
-//根据学院加载专业
-const loadMajors = async () => {
-  if (!selectedCollegeId.value) {
-    majors.value = []
-    selectedMajorId.value = ''
-    return
-  }
-
+// 根据学院加载专业
+const loadMajors = async (collegeId: string) => {
   try {
-    console.log('开始加载专业列表,学院ID:', selectedCollegeId.value)
-
-    const response = await axios.get(`/open/colleges/${selectedCollegeId.value}/majors`)
-    console.log('专业列表响应:', response.data)
-
-    if (response.data.code === 200) {
-      majors.value = response.data.data || []
-      selectedMajorId.value = ''
-      console.log('专业列表加载完成')
-    } else {
-      errorMessage.value = '加载专业列表失败: ' + (response.data.message || '未知错误')
-      majors.value = []
-    }
+    majors.value = await StudentService.getMajorsByCollege(collegeId)
+    selectedMajorId.value = ''
   } catch (error: unknown) {
-    console.error('加载专业列表失败:', error)
-    if (error instanceof Error) {
-      errorMessage.value = '加载专业列表失败: ' + error.message
-    } else {
-      errorMessage.value = '加载专业列表失败: 网络错误'
-    }
+    const message = error instanceof Error ? error.message : '加载专业列表失败'
+    createMessageDialog(message)
     majors.value = []
   }
 }
 
-//注册提交
+// 注册提交
 const handleRegister = async () => {
-  //检查用户是否填写了所有必填字段
-  if (
-    //用trim()去除空格，以免输入的空格被误认为有效内容
-    !form.account.trim() ||
-    !form.name.trim() ||
-    !form.tel.trim() ||
-    !form.password ||
-    !form.collegeId ||
-    !form.majorId
-  ) {
-    errorMessage.value = '请填写所有必填字段'
-    return
-  }
-
-  //用正则表达式验证电话格式
-  const telRegex = /^1[3-9]\d{9}$/
-  if (!telRegex.test(form.tel)) {
-    errorMessage.value = '请输入正确格式的手机号'
+  // 表单验证
+  const validation = StudentService.validateRegisterForm(form)
+  if (!validation.isValid) {
+    createMessageDialog(validation.message)
     return
   }
 
@@ -126,44 +76,29 @@ const handleRegister = async () => {
   loading.value = true
 
   try {
-    console.log('提交的数据:', form)
-
-    const response = await axios.post('/open/register', {
-      name: form.name,
-      account: form.account,
-      tel: form.tel,
+    await StudentService.register({
+      name: form.name.trim(),
+      account: form.account.trim(),
+      tel: form.tel.trim(),
       password: form.password,
       collegeId: form.collegeId,
       majorId: form.majorId
     })
 
-    console.log('注册响应:', response.data)
-
-    if (response.data.code === 200) {
-      successMessage.value = '注册成功!进入登录页面...'
-
-      //2秒后跳转到登录页面
-      setTimeout(() => {
-        router.push('/login')
-      }, 2000)
-    } else {
-      errorMessage.value = '注册失败: ' + (response.data.message || '未知错误')
-    }
+    successMessage.value = '注册成功!进入登录页面...'
+    setTimeout(() => {
+      router.push('/login')
+    }, 2000)
   } catch (error: unknown) {
-    console.error('注册失败:', error)
-    if (error instanceof Error) {
-      errorMessage.value = '注册失败: ' + error.message
-    } else {
-      errorMessage.value = '注册失败: 网络错误'
-    }
+    const message = error instanceof Error ? error.message : '注册失败'
+    createMessageDialog(message)
   } finally {
     loading.value = false
   }
 }
 
-//页面加载时加载学院数据
+// 页面加载时加载学院数据
 onMounted(() => {
-  console.log('页面加载完成，开始加载学院数据...')
   loadColleges()
 })
 </script>
@@ -219,12 +154,7 @@ onMounted(() => {
       <!--学院下拉框-->
       <div class="form-group">
         <label for="collegeSelect">学院:</label>
-        <select
-          v-model="selectedCollegeId"
-          id="collegeSelect"
-          class="form-control"
-          required
-          @change="loadMajors">
+        <select v-model="selectedCollegeId" id="collegeSelect" class="form-control" required>
           <option value="">请选择学院</option>
           <option v-for="college of colleges" :key="college.id" :value="college.id">
             {{ college.name }}

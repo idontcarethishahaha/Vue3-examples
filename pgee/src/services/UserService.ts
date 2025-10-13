@@ -1,6 +1,7 @@
 // services/UserService.ts
 import axios from '@/axios'
 import router from '@/router'
+import { useUserStore } from '@/stores/UserStore'
 import type { LoginRequest, ResultVO, User } from '@/types'
 import { ADMIN, COLLEGE_ADMIN, COUNSELOR, ROUTE_PATHS, STUDENT } from './Const'
 
@@ -18,10 +19,12 @@ export class UserService {
       throw new Error('登录错误：缺少必要信息')
     }
 
-    // 存储token和用户信息到 localStorage
+    // 使用 Store 管理用户状态
+    const userStore = useUserStore()
+    userStore.setUserSessionStorage(user, role)
+
+    // 同时存储 token 到 localStorage（用于 API 请求）
     localStorage.setItem('token', token)
-    localStorage.setItem('role', role)
-    localStorage.setItem('user', JSON.stringify(user))
 
     console.log('登录成功:', { user, token, role })
 
@@ -51,15 +54,16 @@ export class UserService {
    * 获取当前用户信息
    */
   static getCurrentUser(): User | null {
-    const userStr = localStorage.getItem('user')
-    return userStr ? JSON.parse(userStr) : null
+    const userStore = useUserStore()
+    return userStore.getCurrentUser()
   }
 
   /**
    * 获取当前用户角色
    */
   static getRole(): string | null {
-    return localStorage.getItem('role')
+    const userStore = useUserStore()
+    return userStore.getCurrentRole()
   }
 
   /**
@@ -73,16 +77,16 @@ export class UserService {
    * 检查是否已登录
    */
   static isLoggedIn(): boolean {
-    return !!localStorage.getItem('token')
+    const userStore = useUserStore()
+    return userStore.isLoggedIn()
   }
 
   /**
    * 退出登录
    */
   static logout(): void {
-    localStorage.removeItem('token')
-    localStorage.removeItem('role')
-    localStorage.removeItem('user')
+    const userStore = useUserStore()
+    userStore.clearUser()
     router.push('/login')
   }
 

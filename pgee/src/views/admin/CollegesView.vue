@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import axios from '@/axios'
-import type { AddCollegeRequest, College, UpdateCollegeRequest } from '@/types/admin'
+import { createMessageDialog } from '@/components/message'
+import { CollegeService, CommonService } from '@/services'
+import { useCollegeStore } from '@/stores/CollegeStore'
+import type { College } from '@/types'
+import type { AddCollegeRequest, UpdateCollegeRequest } from '@/types/admin'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
+const collegeStore = useCollegeStore()
 
-const colleges = ref<College[]>([])
 const showModal = ref(false)
 const isEditing = ref(false)
 const collegeForm = ref({
@@ -14,134 +17,101 @@ const collegeForm = ref({
   name: ''
 })
 
-//检查登录状态
-const checkLogin = (): boolean => {
-  const token = localStorage.getItem('token')
-  const role = localStorage.getItem('role')
+// 使用 Store 中的响应式数据
+const colleges = collegeStore.collegesS
 
-  console.log('登录状态检查:', {
-    token: token ? '存在' : '不存在',
-    role
-  })
-
-  if (!token) {
-    console.log('未找到token,跳转到登录页')
-    router.push('/login')
-    return false
+// 格式化日期函数（直接写在组件里）
+const formatDate = (dateString?: string): string => {
+  if (!dateString) return '-'
+  try {
+    return new Date(dateString).toLocaleDateString('zh-CN')
+  } catch {
+    return '-'
   }
-
-  if (role !== 'Fr5g') {
-    console.log('角色不符，当前角色:', role, '，期望角色: Fr5g')
-    router.push('/login')
-    return false
-  }
-
-  console.log('登录状态验证通过')
-  return true
 }
 
-//加载学院列表
+// 确认对话框函数（直接写在组件里）
+const confirmAction = (message: string): Promise<boolean> => {
+  return Promise.resolve(window.confirm(message))
+}
+
+// 加载学院列表
 const loadColleges = async (): Promise<void> => {
   try {
     console.log('开始加载学院列表...')
-    const response = await axios.get('/admin/colleges')
-    console.log('学院列表响应:', response.data)
-
-    if (response.data.code === 200) {
-      colleges.value = response.data.data
-      console.log('成功加载学院数量:', colleges.value.length)
-    } else {
-      alert('加载学院列表失败: ' + response.data.message)
-    }
+    const collegesData = await CollegeService.getColleges()
+    collegeStore.setColleges(collegesData)
+    console.log('成功加载学院数量:', collegesData.length)
   } catch (error: unknown) {
-    console.error('加载学院列表失败:', error)
-    if (error instanceof Error) {
-      alert('加载学院列表失败: ' + error.message)
-    } else {
-      alert('加载学院列表失败')
-    }
+    const message = error instanceof Error ? error.message : '加载学院列表失败'
+    createMessageDialog(message)
   }
 }
 
-//显示添加学院模态框
+// 显示添加学院模态框
 const showAddCollegeModal = (): void => {
   collegeForm.value = { id: '', name: '' }
   isEditing.value = false
   showModal.value = true
 }
 
-//编辑学院
+// 编辑学院
 const editCollege = (college: College): void => {
   collegeForm.value = { ...college }
   isEditing.value = true
   showModal.value = true
 }
 
-//关闭模态框
+// 关闭模态框
 const closeModal = (): void => {
   showModal.value = false
 }
 
-//保存学院（添加或更新）
+// 保存学院（添加或更新）
 const saveCollege = async (): Promise<void> => {
-  if (!collegeForm.value.name.trim()) {
-    alert('请输入学院名称')
+  // 表单验证
+  const validation = CollegeService.validateCollegeForm(collegeForm.value)
+  if (!validation.isValid) {
+    createMessageDialog(validation.message)
     return
   }
 
   try {
-    let response
-
     if (isEditing.value) {
       const request: UpdateCollegeRequest = { name: collegeForm.value.name.trim() }
-      response = await axios.put(`/admin/colleges/${collegeForm.value.id}`, request)
+      await CollegeService.updateCollege(collegeForm.value.id, request)
+      collegeStore.updateCollege(collegeForm.value.id, { name: collegeForm.value.name.trim() })
+      createMessageDialog('更新成功')
     } else {
       const request: AddCollegeRequest = { name: collegeForm.value.name.trim() }
-      response = await axios.post('/admin/colleges', request)
-    }
-
-    if (response.data.code === 200) {
-      alert(isEditing.value ? '更新成功' : '添加成功')
-      closeModal()
+      await CollegeService.addCollege(request)
+      createMessageDialog('添加成功')
+      // 重新加载列表以获取新学院的完整信息
       await loadColleges()
-    } else {
-      alert((isEditing.value ? '更新失败' : '添加失败') + ': ' + response.data.message)
     }
+    closeModal()
   } catch (error: unknown) {
-    console.error('操作失败:', error)
-    if (error instanceof Error) {
-      alert('操作失败: ' + error.message)
-    } else {
-      alert('操作失败')
-    }
+    const message = error instanceof Error ? error.message : '操作失败'
+    createMessageDialog(message)
   }
 }
 
-//删除学院
+// 删除学院
 const removeCollege = async (college: College): Promise<void> => {
-  if (!confirm(`确定要删除学院 "${college.name}" 吗？此操作不可恢复！`)) {
-    return
-  }
+  const confirmed = await confirmAction(`确定要删除学院 "${college.name}" 吗？此操作不可恢复！`)
+  if (!confirmed) return
 
   try {
-    const response = await axios.delete(`/admin/colleges/${college.id}`)
-    if (response.data.code === 200) {
-      alert('删除成功')
-      await loadColleges()
-    } else {
-      alert('删除失败: ' + response.data.message)
-    }
+    await CollegeService.deleteCollege(college.id)
+    collegeStore.removeCollege(college.id)
+    createMessageDialog('删除成功')
   } catch (error: unknown) {
-    console.error('删除学院失败:', error)
-    if (error instanceof Error) {
-      alert('删除学院失败: ' + error.message)
-    } else {
-      alert('删除学院失败')
-    }
+    const message = error instanceof Error ? error.message : '删除学院失败'
+    createMessageDialog(message)
   }
 }
 
-//管理学院管理员,跳转到管理员页面
+// 管理学院管理员，跳转到管理员页面
 const manageAdmins = (college: College): void => {
   router.push({
     path: '/college-admins',
@@ -152,28 +122,18 @@ const manageAdmins = (college: College): void => {
   })
 }
 
-//退出登录
-const logout = (): void => {
-  if (confirm('确定要退出登录吗？')) {
-    localStorage.clear()
-    router.push('/login')
+// 退出登录
+const logout = async (): Promise<void> => {
+  const confirmed = await confirmAction('确定要退出登录吗？')
+  if (confirmed) {
+    CommonService.logout()
   }
 }
 
-//格式化日期
-const formatDate = (dateString?: string): string => {
-  if (!dateString) return '-'
-  try {
-    return new Date(dateString).toLocaleDateString('zh-CN')
-  } catch {
-    return '-'
-  }
-}
-
-//初始化
+// 初始化
 onMounted(() => {
   console.log('组件挂载，开始检查登录状态...')
-  if (checkLogin()) {
+  if (CommonService.checkAdminLogin()) {
     console.log('登录状态验证通过，开始加载学院列表...')
     loadColleges()
   }
@@ -240,4 +200,6 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+/* 样式保持不变 */
+</style>

@@ -20,6 +20,8 @@ export interface College {
   id: string
   name: string
   code?: string
+  createTime?: string
+  updateTime?: string
 }
 
 // 专业类型

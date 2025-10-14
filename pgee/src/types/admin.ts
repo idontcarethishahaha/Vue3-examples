@@ -1,6 +1,6 @@
 //学院类型
 export interface College {
-  id: string //后端将Long转为String返回
+  id: string
   name: string
   createTime?: string
   updateTime?: string
@@ -18,7 +18,7 @@ export interface UpdateCollegeRequest {
 
 //学院管理员类型
 export interface CollegeAdmin {
-  id: string //后端将Long转为String返回
+  id: string
   name: string
   account: string
   tel?: string

@@ -10,13 +10,11 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 const collegeStore = useCollegeStore()
 
-// 响应式数据
 const showModal = ref(false)
 const isEditing = ref(false)
 const collegeForm = ref({ id: '', name: '' })
 const colleges = collegeStore.collegesS
 
-// UI 交互函数
 const showAddCollegeModal = () => {
   collegeForm.value = { id: '', name: '' }
   isEditing.value = false
@@ -74,7 +72,6 @@ const logout = async () => {
   }
 }
 
-// 初始化
 onMounted(() => {
   CollegeService.initCollegeManagement()
 })
@@ -138,6 +135,4 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped>
-/* 样式保持不变 */
-</style>
+<style scoped></style>

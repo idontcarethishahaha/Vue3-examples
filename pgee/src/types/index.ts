@@ -1,4 +1,3 @@
-// types/index.ts
 // 后端返回的统一响应格式
 export interface ResultVO<T = unknown> {
   code: number
@@ -7,7 +6,7 @@ export interface ResultVO<T = unknown> {
   data: T
 }
 
-// 通用响应
+//通用响应
 export interface ApiResponse<T = unknown> {
   success: boolean
   data?: T
@@ -15,7 +14,7 @@ export interface ApiResponse<T = unknown> {
   code?: number
 }
 
-// 学院类型
+//学院类型
 export interface College {
   id: string
   name: string
@@ -24,7 +23,7 @@ export interface College {
   updateTime?: string
 }
 
-// 专业类型
+//专业类型
 export interface Major {
   id: string
   name: string
@@ -32,20 +31,20 @@ export interface Major {
   code?: string
 }
 
-// 用户信息（根据后端 User 类）
+//用户信息
 export interface User {
   id: string
   name: string
   collegeId?: string
   account: string
-  password?: string // 可选，因为前端通常不处理密码
+  password?: string
   role: string
   tel?: string
   createTime?: string
   updateTime?: string
 }
 
-// 学生信息（根据后端 StudentInfo 类）
+//学生信息
 export interface StudentInfo {
   id: string
   userId: string
@@ -54,7 +53,7 @@ export interface StudentInfo {
   updateTime?: string
 }
 
-// 辅导员信息（根据后端 CounselorInfo 类）
+//辅导员信息
 export interface CounselorInfo {
   id: string
   userId: string
@@ -63,7 +62,7 @@ export interface CounselorInfo {
   updateTime?: string
 }
 
-// 注册请求参数
+//注册请求参数
 export interface RegisterRequest {
   account: string
   name: string
@@ -73,13 +72,13 @@ export interface RegisterRequest {
   majorId: string
 }
 
-// 登录请求参数
+//登录请求参数
 export interface LoginRequest {
   account: string
   password: string
 }
 
-// 登录响应（包含 token 和用户信息）
+//登录响应（包含token）
 export interface LoginResponse {
   user: User
   token: string

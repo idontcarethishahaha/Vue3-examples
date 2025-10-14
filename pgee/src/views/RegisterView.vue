@@ -23,7 +23,6 @@ const form = reactive<RegisterRequest>({
   majorId: ''
 })
 
-// 监听学院选择
 watch(selectedCollegeId, async newCollegeId => {
   if (newCollegeId) {
     form.collegeId = newCollegeId
@@ -35,12 +34,10 @@ watch(selectedCollegeId, async newCollegeId => {
   }
 })
 
-// 监听专业选择
 watch(selectedMajorId, newMajorId => {
   form.majorId = newMajorId || ''
 })
 
-// 加载学院列表
 const loadColleges = async () => {
   try {
     colleges.value = await StudentService.getColleges()
@@ -50,7 +47,6 @@ const loadColleges = async () => {
   }
 }
 
-// 根据学院加载专业
 const loadMajors = async (collegeId: string) => {
   try {
     majors.value = await StudentService.getMajorsByCollege(collegeId)
@@ -62,9 +58,7 @@ const loadMajors = async (collegeId: string) => {
   }
 }
 
-// 注册提交
 const handleRegister = async () => {
-  // 表单验证
   const validation = StudentService.validateRegisterForm(form)
   if (!validation.isValid) {
     createMessageDialog(validation.message)
@@ -97,7 +91,6 @@ const handleRegister = async () => {
   }
 }
 
-// 页面加载时加载学院数据
 onMounted(() => {
   loadColleges()
 })
@@ -151,7 +144,6 @@ onMounted(() => {
           required />
       </div>
 
-      <!--学院下拉框-->
       <div class="form-group">
         <label for="collegeSelect">学院:</label>
         <select v-model="selectedCollegeId" id="collegeSelect" class="form-control" required>
@@ -162,7 +154,6 @@ onMounted(() => {
         </select>
       </div>
 
-      <!--专业下拉框-->
       <div class="form-group">
         <label for="majorSelect">专业:</label>
         <select

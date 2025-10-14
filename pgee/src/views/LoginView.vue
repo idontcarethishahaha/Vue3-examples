@@ -12,9 +12,7 @@ const form = reactive<LoginRequest>({
   password: ''
 })
 
-// 登录提交
 const handleLogin = async () => {
-  // 表单验证
   const validation = UserService.validateLoginForm(form)
   if (!validation.isValid) {
     createMessageDialog(validation.message)
@@ -28,7 +26,6 @@ const handleLogin = async () => {
       account: form.account.trim(),
       password: form.password.trim()
     })
-    // 登录成功后的跳转在 UserService 中处理
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : '登录失败，请检查网络连接'
     createMessageDialog(message)
@@ -37,11 +34,9 @@ const handleLogin = async () => {
   }
 }
 
-// 页面加载时聚焦账号输入框
 onMounted(() => {
   accountInput.value?.focus()
 
-  // 如果已登录，根据角色跳转到对应页面
   if (UserService.isLoggedIn()) {
     const role = UserService.getRole()
     console.log('用户已登录，角色:', role)

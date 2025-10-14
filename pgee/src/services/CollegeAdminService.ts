@@ -43,6 +43,7 @@ export class CollegeAdminService {
     if (response.data.code !== 200) {
       throw new Error(response.data.message || '重置密码失败')
     }
+    // 注意：这里不要调用 createMessageDialog，应该在 View 层处理
   }
 
   /**
@@ -55,6 +56,7 @@ export class CollegeAdminService {
     if (response.data.code !== 200) {
       throw new Error(response.data.message || '移除管理员失败')
     }
+    // 注意：这里不要调用 createMessageDialog，应该在 View 层处理
   }
 
   /**

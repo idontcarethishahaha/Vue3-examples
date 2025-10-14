@@ -1,7 +1,4 @@
-// utils/formatters.ts
-/**
- * 格式化日期
- */
+//格式化日期
 export const formatDate = (dateString?: string): string => {
   if (!dateString) return '-'
   try {

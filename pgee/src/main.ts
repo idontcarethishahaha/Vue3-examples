@@ -18,7 +18,7 @@ app.config.errorHandler = err => {
 
 // 全局 Promise 异常处理
 window.addEventListener('unhandledrejection', event => {
-  event.preventDefault() // 阻止默认的浏览器错误提示
+  event.preventDefault()
   console.error('Unhandled promise rejection:', event.reason)
   createMessageDialog(event.reason?.message || String(event.reason))
 })

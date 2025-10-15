@@ -110,7 +110,7 @@ export interface College {
   updateTime?: string
 }
 
-//添加学院
+//添加学院,对应后端的DTO
 export interface AddCollegeRequest {
   name: string
 }

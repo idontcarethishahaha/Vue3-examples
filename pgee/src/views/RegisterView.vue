@@ -97,56 +97,38 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="register-container">
-    <div class="register-header">
+  <div>
+    <div>
       <h1>学生注册</h1>
     </div>
 
-    <div v-if="errorMessage" class="alert alert-error">
+    <div v-if="errorMessage">
       {{ errorMessage }}
     </div>
 
-    <div v-if="successMessage" class="alert alert-success">
+    <div v-if="successMessage">
       {{ successMessage }}
     </div>
 
     <form @submit.prevent="handleRegister">
-      <div class="form-group">
+      <div>
         <label for="account">学号:</label>
-        <input
-          v-model="form.account"
-          type="text"
-          id="account"
-          class="form-control"
-          placeholder="请输入学号"
-          required />
+        <input v-model="form.account" type="text" id="account" placeholder="请输入学号" required />
       </div>
 
-      <div class="form-group">
+      <div>
         <label for="name">姓名:</label>
-        <input
-          v-model="form.name"
-          type="text"
-          id="name"
-          class="form-control"
-          placeholder="请输入姓名"
-          required />
+        <input v-model="form.name" type="text" id="name" placeholder="请输入姓名" required />
       </div>
 
-      <div class="form-group">
+      <div>
         <label for="tel">电话:</label>
-        <input
-          v-model="form.tel"
-          type="tel"
-          id="tel"
-          class="form-control"
-          placeholder="请输入电话"
-          required />
+        <input v-model="form.tel" type="tel" id="tel" placeholder="请输入电话" required />
       </div>
 
-      <div class="form-group">
+      <div>
         <label for="collegeSelect">学院:</label>
-        <select v-model="selectedCollegeId" id="collegeSelect" class="form-control" required>
+        <select v-model="selectedCollegeId" id="collegeSelect" required>
           <option value="">请选择学院</option>
           <option v-for="college of colleges" :key="college.id" :value="college.id">
             {{ college.name }}
@@ -154,12 +136,11 @@ onMounted(() => {
         </select>
       </div>
 
-      <div class="form-group">
+      <div>
         <label for="majorSelect">专业:</label>
         <select
           v-model="selectedMajorId"
           id="majorSelect"
-          class="form-control"
           required
           :disabled="!selectedCollegeId || majors.length === 0">
           <option value="">
@@ -177,23 +158,22 @@ onMounted(() => {
         </select>
       </div>
 
-      <div class="form-group">
+      <div>
         <label for="password">密码:</label>
         <input
           v-model="form.password"
           type="password"
           id="password"
-          class="form-control"
           placeholder="请输入密码"
           required />
       </div>
 
-      <button type="submit" class="btn-register" :disabled="loading">
+      <button type="submit" :disabled="loading">
         {{ loading ? '注册中...' : '注册' }}
       </button>
     </form>
 
-    <div class="login-link">
+    <div>
       <router-link to="/login">已有账号？立即登录</router-link>
     </div>
   </div>

@@ -1,3 +1,20 @@
+import { usePost } from '@/axios'
+
+export interface LoginRequest {
+  account: string
+  password: string
+}
+
+export interface UserInfo {
+  id: number
+  account: string
+  name: string
+}
+
+export const login = (data: LoginRequest) => {
+  return usePost<UserInfo>('/open/login', data)
+}
+
 // 后端返回的统一响应格式
 export interface ResultVO<T = unknown> {
   code: number
@@ -85,5 +102,37 @@ export interface LoginResponse {
   role: string
 }
 
-// 从当前目录下的admin.ts文件中导入所有导出内容
-export * from './admin'
+//学院类型
+export interface College {
+  id: string
+  name: string
+  createTime?: string
+  updateTime?: string
+}
+
+//添加学院
+export interface AddCollegeRequest {
+  name: string
+}
+
+//更新学院
+export interface UpdateCollegeRequest {
+  name: string
+}
+
+//学院管理员类型
+export interface CollegeAdmin {
+  id: string
+  name: string
+  account: string
+  tel?: string
+  createTime?: string
+}
+
+//添加学院管理员
+export interface AddCollegeAdminRequest {
+  name: string
+  account: string
+  tel?: string
+  password?: string
+}

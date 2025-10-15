@@ -1,4 +1,3 @@
-// services/CommonService.ts
 import axios from '@/axios'
 import router from '@/router'
 import { useUserStore } from '@/stores/UserStore'

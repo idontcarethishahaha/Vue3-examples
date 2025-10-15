@@ -1,4 +1,3 @@
-// services/UserService.ts
 import axios from '@/axios'
 import router from '@/router'
 import { useUserStore } from '@/stores/UserStore'
@@ -6,9 +5,6 @@ import type { LoginRequest, ResultVO, User } from '@/types'
 import { ADMIN, COLLEGE_ADMIN, COUNSELOR, ROUTE_PATHS, STUDENT } from './Const'
 
 export class UserService {
-  /**
-   * 登录服务
-   */
   static async loginService(loginData: LoginRequest): Promise<void> {
     const resp = await axios.post<ResultVO<User>>('/open/login', loginData)
     const user = resp.data.data
@@ -50,49 +46,36 @@ export class UserService {
     await router.push(path)
   }
 
-  /**
-   * 获取当前用户信息
-   */
+  //获取当前用户信息
   static getCurrentUser(): User | null {
     const userStore = useUserStore()
     return userStore.getCurrentUser()
   }
 
-  /**
-   * 获取当前用户角色
-   */
+  //获取当前用户角色
   static getRole(): string | null {
     const userStore = useUserStore()
     return userStore.getCurrentRole()
   }
 
-  /**
-   * 获取 token
-   */
+  //获取 token
   static getToken(): string | null {
     return localStorage.getItem('token')
   }
 
-  /**
-   * 检查是否已登录
-   */
+  //检查是否已登录
   static isLoggedIn(): boolean {
     const userStore = useUserStore()
     return userStore.isLoggedIn()
   }
 
-  /**
-   * 退出登录
-   */
   static logout(): void {
     const userStore = useUserStore()
     userStore.clearUser()
     router.push('/login')
   }
 
-  /**
-   * 验证登录表单
-   */
+  //验证登录表单
   static validateLoginForm(form: LoginRequest): { isValid: boolean; message: string } {
     if (!form.account?.trim() || !form.password?.trim()) {
       return { isValid: false, message: '请输入账号和密码' }

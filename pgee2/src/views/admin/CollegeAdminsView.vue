@@ -9,6 +9,7 @@ import { useRoute, useRouter } from 'vue-router'
 const router = useRouter()
 const route = useRoute()
 
+// 响应式数据
 const showModal = ref(false)
 const searchKeyword = ref('')
 const admins = ref<User[]>([])
@@ -23,6 +24,7 @@ const adminForm = ref({
 const currentCollegeId = ref('')
 const currentCollegeName = ref('')
 
+// 计算属性
 const filteredAdmins = computed(() => {
   if (!searchKeyword.value) return admins.value
 
@@ -37,6 +39,7 @@ const filteredAdmins = computed(() => {
 
 const adminCount = computed(() => admins.value.length)
 
+// UI 交互函数
 const showAddAdminModal = () => {
   adminForm.value = { name: '', account: '', tel: '', password: '' }
   showModal.value = true
@@ -46,6 +49,7 @@ const closeModal = () => {
   showModal.value = false
 }
 
+// 业务操作函数
 const loadAdmins = async () => {
   try {
     const adminsData = await CollegeAdminService.getCollegeAdmins(currentCollegeId.value)
@@ -118,8 +122,9 @@ const logout = async () => {
   }
 }
 
+// 初始化
 onMounted(() => {
-  //检查登录状态
+  // 检查登录状态
   if (!CommonService.checkAdminLogin()) {
     return
   }
@@ -140,6 +145,7 @@ onMounted(() => {
 
 <template>
   <div class="admin-container">
+    <!-- 头部导航 -->
     <div class="header">
       <h1>推免系统 - 超级管理员</h1>
       <div class="user-info">
@@ -148,13 +154,17 @@ onMounted(() => {
       </div>
     </div>
 
+    <!-- 主体容器 -->
     <div class="container">
+      <!-- 侧边栏 -->
       <div class="sidebar">
         <div class="menu-item" @click="navigateToColleges">学院管理</div>
         <div class="menu-item">用户管理</div>
       </div>
 
+      <!-- 主内容区 -->
       <div class="main-content">
+        <!-- 面包屑导航 -->
         <div class="breadcrumb">
           <a @click="navigateToColleges" style="cursor: pointer; color: #1890ff">学院管理</a>
           &gt;
@@ -177,11 +187,13 @@ onMounted(() => {
           </div>
         </div>
 
+        <!-- 统计信息 -->
         <div class="stats">
           当前学院管理员总数：
           <strong>{{ adminCount }}</strong>
         </div>
 
+        <!-- 管理员表格 -->
         <table v-if="filteredAdmins.length > 0" class="college-table">
           <thead>
             <tr>
@@ -210,6 +222,7 @@ onMounted(() => {
           </tbody>
         </table>
 
+        <!-- 空状态 -->
         <div v-else class="empty-state">
           <h3>暂无管理员</h3>
           <p>当前学院还没有管理员，点击"添加管理员"按钮来添加</p>
@@ -217,6 +230,7 @@ onMounted(() => {
       </div>
     </div>
 
+    <!-- 添加管理员模态框 -->
     <div v-if="showModal" class="modal-overlay" @click="closeModal">
       <div class="modal" @click.stop>
         <div class="modal-header">

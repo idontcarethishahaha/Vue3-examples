@@ -1,4 +1,3 @@
-// services/index.ts
 export * from './CollegeAdminService'
 export * from './CollegeService'
 export * from './CommonService'

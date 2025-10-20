@@ -3,7 +3,7 @@ import { createMessageDialog } from '@/components/message'
 import { CollegeAdminService } from '@/services'
 import { formatDate } from '@/services/FormatUtils'
 import type { User } from '@/types'
-import { computed, onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -37,7 +37,7 @@ const filteredAdmins = computed(() => {
 
 const adminCount = computed(() => admins.value.length)
 
-//添加管理员弹窗
+// 添加管理员弹窗
 const showAddAdminModal = () => {
   adminForm.value = { name: '', account: '', tel: '', password: '' }
   showModal.value = true
@@ -48,18 +48,13 @@ const closeModal = () => {
   showModal.value = false
 }
 
-//加载管理员列表
+// 加载管理员列表
 const loadAdmins = async () => {
-  try {
-    const adminsData = await CollegeAdminService.getCollegeAdmins(currentCollegeId.value)
-    admins.value = adminsData
-  } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : '加载管理员列表失败'
-    createMessageDialog(message)
-  }
+  const adminsData = await CollegeAdminService.getCollegeAdmins(currentCollegeId.value)
+  admins.value = adminsData
 }
 
-//添加管理员
+// 添加管理员
 const addAdmin = async () => {
   const validation = CollegeAdminService.validateAdminForm(adminForm.value)
   if (!validation.isValid) {
@@ -67,51 +62,36 @@ const addAdmin = async () => {
     return
   }
 
-  try {
-    await CollegeAdminService.addCollegeAdmin(currentCollegeId.value, {
-      name: adminForm.value.name.trim(),
-      account: adminForm.value.account.trim(),
-      tel: adminForm.value.tel.trim(),
-      password: adminForm.value.password.trim() || adminForm.value.account.trim()
-    })
-    createMessageDialog('添加成功')
-    closeModal()
-    await loadAdmins()
-  } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : '添加管理员失败'
-    createMessageDialog(message)
-  }
+  await CollegeAdminService.addCollegeAdmin(currentCollegeId.value, {
+    name: adminForm.value.name.trim(),
+    account: adminForm.value.account.trim(),
+    tel: adminForm.value.tel.trim(),
+    password: adminForm.value.password.trim() || adminForm.value.account.trim()
+  })
+  createMessageDialog('添加成功')
+  closeModal()
+  await loadAdmins()
 }
 
-//重置密码
+// 重置密码
 const resetPassword = async (admin: User) => {
   if (!confirm(`确定要重置管理员 "${admin.name}" 的密码吗？密码将重置为默认值。`)) {
     return
   }
 
-  try {
-    await CollegeAdminService.resetPassword(admin.account)
-    createMessageDialog('密码重置成功')
-  } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : '重置密码失败'
-    createMessageDialog(message)
-  }
+  await CollegeAdminService.resetPassword(admin.account)
+  createMessageDialog('密码重置成功')
 }
 
-//移除管理员
+// 移除管理员
 const removeAdmin = async (admin: User) => {
   if (!confirm(`确定要移除管理员 "${admin.name}" 吗？此操作不可恢复！`)) {
     return
   }
 
-  try {
-    await CollegeAdminService.removeCollegeAdmin(currentCollegeId.value, admin.id)
-    createMessageDialog('移除成功')
-    await loadAdmins()
-  } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : '移除管理员失败'
-    createMessageDialog(message)
-  }
+  await CollegeAdminService.removeCollegeAdmin(currentCollegeId.value, admin.id)
+  createMessageDialog('移除成功')
+  await loadAdmins()
 }
 
 // 跳转到学院管理页面
@@ -119,20 +99,15 @@ const navigateToColleges = () => {
   router.push('/admin/colleges')
 }
 
-// 初始化
-onMounted(() => {
-  // 从路由参数获取学院信息
-  currentCollegeId.value = route.query.collegeId as string
-  currentCollegeName.value = decodeURIComponent((route.query.collegeName as string) || '')
+currentCollegeId.value = route.query.collegeId as string
+currentCollegeName.value = decodeURIComponent((route.query.collegeName as string) || '')
 
-  if (!currentCollegeId.value) {
-    createMessageDialog('无效的学院信息')
-    router.push('/admin/colleges')
-    return
-  }
-
+if (!currentCollegeId.value) {
+  createMessageDialog('无效的学院信息')
+  router.push('/admin/colleges')
+} else {
   loadAdmins()
-})
+}
 </script>
 
 <template>

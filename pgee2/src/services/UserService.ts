@@ -18,8 +18,7 @@ export class UserService {
     const userStore = useUserStore()
     userStore.setUserSessionStorage(user, role)
 
-    // 存储 token 到 localStorage
-    localStorage.setItem('token', token)
+    //存储token到sessionStorage
     sessionStorage.setItem('token', token)
     sessionStorage.setItem('role', role)
 
@@ -60,9 +59,9 @@ export class UserService {
     return userStore.getCurrentRole()
   }
 
-  //获取 token
+  //从sessionStorage获取token
   static getToken(): string | null {
-    return localStorage.getItem('token')
+    return sessionStorage.getItem('token')
   }
 
   //检查是否已登录

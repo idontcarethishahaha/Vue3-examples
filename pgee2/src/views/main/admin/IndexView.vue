@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import { CollegeService } from '@/services'
-import { onMounted } from 'vue'
 
-onMounted(() => {
-  CollegeService.initCollegeManagement()
-})
+CollegeService.initCollegeManagement()
 </script>
 
 <template>

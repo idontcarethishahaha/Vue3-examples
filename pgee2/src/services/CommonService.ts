@@ -6,9 +6,7 @@ import { ADMIN } from './Const'
 const userStore = useUserStore()
 
 export class CommonService {
-  /**
-   * 检查管理员登录状态
-   */
+  //检查管理员登录状态
   static checkAdminLogin(): boolean {
     const token = localStorage.getItem('token')
     const role = localStorage.getItem('role')
@@ -34,9 +32,7 @@ export class CommonService {
     return true
   }
 
-  /**
-   * 检查登录状态
-   */
+  //检查登录状态
   static checkLogin(): boolean {
     const token = localStorage.getItem('token')
     const role = localStorage.getItem('role')
@@ -49,9 +45,7 @@ export class CommonService {
     return true
   }
 
-  /**
-   * 检查特定角色权限
-   */
+  //检查特定角色权限
   static checkRole(allowedRoles: string[]): boolean {
     const role = localStorage.getItem('role')
     if (!role || !allowedRoles.includes(role)) {
@@ -61,16 +55,13 @@ export class CommonService {
     return true
   }
 
-  /**
-   * 获取当前用户角色
-   */
+  // 获取当前用户角色
   static getRole(): string | null {
     return localStorage.getItem('role')
   }
 
-  /**
-   * 退出登录
-   */
+  //退出登录
+
   static logout(): void {
     localStorage.removeItem('token')
     localStorage.removeItem('role')
@@ -81,9 +72,7 @@ export class CommonService {
     router.push('/login')
   }
 
-  /**
-   * 更新密码
-   */
+  //更新密码
   static async updateSelfPassword(password: string): Promise<void> {
     const response = await axios.put('/user/password', { password })
     if (response.data.code !== 200) {

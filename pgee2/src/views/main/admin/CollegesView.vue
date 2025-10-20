@@ -4,7 +4,7 @@ import { CollegeService } from '@/services'
 import { formatDate } from '@/services/FormatUtils'
 import { useCollegeStore } from '@/stores/CollegeStore'
 import type { College } from '@/types'
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -15,7 +15,7 @@ const isEditing = ref(false)
 const collegeForm = ref({ id: '', name: '' })
 const colleges = collegeStore.collegesS
 
-// 打开添加学院弹窗
+//添加学院
 const showAddCollegeModal = () => {
   collegeForm.value = { id: '', name: '' }
   isEditing.value = false
@@ -42,21 +42,16 @@ const saveCollege = async () => {
     return
   }
 
-  try {
-    if (isEditing.value) {
-      await CollegeService.updateCollege(collegeForm.value.id, {
-        name: collegeForm.value.name.trim()
-      })
-    } else {
-      await CollegeService.addCollege({
-        name: collegeForm.value.name.trim()
-      })
-    }
-    closeModal()
-  } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : '操作失败'
-    createMessageDialog(message)
+  if (isEditing.value) {
+    await CollegeService.updateCollege(collegeForm.value.id, {
+      name: collegeForm.value.name.trim()
+    })
+  } else {
+    await CollegeService.addCollege({
+      name: collegeForm.value.name.trim()
+    })
   }
+  closeModal()
 }
 
 // 删除学院
@@ -72,10 +67,7 @@ const manageAdmins = (college: College) => {
   })
 }
 
-// 初始化数据
-onMounted(() => {
-  CollegeService.initCollegeManagement()
-})
+CollegeService.initCollegeManagement()
 </script>
 
 <template>

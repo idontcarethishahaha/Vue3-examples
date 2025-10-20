@@ -3,7 +3,6 @@ import type { ResultVO, User } from '@/types'
 
 export class CollegeAdminService {
   //获取学院管理员列表
-
   static async getCollegeAdmins(collegeId: string): Promise<User[]> {
     const response = await axios.get<ResultVO<User[]>>(`/admin/colleges/${collegeId}/collegeadmins`)
     if (response.data.code === 200) {
@@ -39,7 +38,7 @@ export class CollegeAdminService {
     }
   }
 
-  // 移除学院管理员
+  //移除学院管理员
   static async removeCollegeAdmin(collegeId: string, userId: string): Promise<void> {
     const response = await axios.delete<ResultVO<void>>(
       `/admin/colleges/${collegeId}/collegeadmins/${userId}`

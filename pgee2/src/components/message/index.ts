@@ -8,11 +8,9 @@ export const createMessageDialog = (msg: string, close: () => void = () => {}) =
     defineAsyncComponent(() => import('./ConfirmMessage.vue')),
     { message: msg, close }
   )
-  //渲染到body
   render(node, document.body)
 }
 
-//创建成功通知
 export const createElNotificationSuccess = (msg: string) => {
   ElNotification({
     title: 'Success',

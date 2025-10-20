@@ -8,9 +8,8 @@ import { CommonService } from './index'
 const collegeStore = useCollegeStore()
 
 export class CollegeService {
-  /**
-   * 初始化学院管理（包含权限检查和数据加载）
-   */
+  //初始化学院管理
+
   static async initCollegeManagement(): Promise<boolean> {
     console.log('组件挂载，开始检查登录状态...')
     if (!CommonService.checkAdminLogin()) {
@@ -22,9 +21,7 @@ export class CollegeService {
     return true
   }
 
-  /**
-   * 加载学院列表
-   */
+  //加载学院列表
   static async loadColleges(): Promise<void> {
     try {
       console.log('开始加载学院列表...')
@@ -42,21 +39,17 @@ export class CollegeService {
     }
   }
 
-  /**
-   * 添加学院
-   */
+  //添加学院
   static async addCollege(collegeData: AddCollegeRequest): Promise<void> {
     const response = await axios.post<ResultVO<College>>('/admin/colleges', collegeData)
     if (response.data.code !== 200) {
       throw new Error(response.data.message || '添加学院失败')
     }
     createMessageDialog('添加成功')
-    await this.loadColleges() // 重新加载以获取完整信息
+    await this.loadColleges()
   }
 
-  /**
-   * 更新学院
-   */
+  //更新学院
   static async updateCollege(collegeId: string, collegeData: UpdateCollegeRequest): Promise<void> {
     const response = await axios.put<ResultVO<College>>(`/admin/colleges/${collegeId}`, collegeData)
     if (response.data.code !== 200) {
@@ -66,9 +59,7 @@ export class CollegeService {
     createMessageDialog('更新成功')
   }
 
-  /**
-   * 删除学院
-   */
+  //删除学院
   static async deleteCollege(college: College): Promise<void> {
     const confirmed = await this.confirmAction(
       `确定要删除学院 "${college.name}" 吗？此操作不可恢复！`
@@ -88,9 +79,7 @@ export class CollegeService {
     }
   }
 
-  /**
-   * 验证学院表单
-   */
+  //验证学院表单
   static validateCollegeForm(form: { name: string }): { isValid: boolean; message: string } {
     if (!form.name?.trim()) {
       return { isValid: false, message: '请输入学院名称' }
@@ -98,9 +87,6 @@ export class CollegeService {
     return { isValid: true, message: '' }
   }
 
-  /**
-   * 确认对话框
-   */
   private static confirmAction(message: string): Promise<boolean> {
     return Promise.resolve(window.confirm(message))
   }

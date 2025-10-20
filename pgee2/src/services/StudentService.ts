@@ -1,11 +1,5 @@
 import axios from '@/axios'
-import { useCollegeStore } from '@/stores/CollegeStore'
-import { useMajorStore } from '@/stores/MajorStore'
-import type { RegisterRequest } from '@/types'
-import { StoreCache, StoreMapCache } from './Decorators'
-
-const collegeStore = useCollegeStore()
-const majorStore = useMajorStore()
+import type { College, Major, RegisterRequest } from '@/types'
 
 // 定义表单验证结果的类型
 interface ValidationResult {
@@ -24,11 +18,8 @@ interface RegisterFormData {
 }
 
 export class StudentService {
-  /**
-   * 获取所有学院列表（带缓存）
-   */
-  @StoreCache(collegeStore.collegesS)
-  static async getColleges() {
+  //获取所有学院列表
+  static async getColleges(): Promise<College[]> {
     const response = await axios.get('/open/colleges')
     if (response.data.code === 200) {
       return response.data.data || []
@@ -36,11 +27,8 @@ export class StudentService {
     throw new Error(response.data.message || '加载学院列表失败')
   }
 
-  /**
-   * 根据学院ID获取专业列表（带缓存）
-   */
-  @StoreMapCache(majorStore.majorsMapS, [0]) // [0] 表示使用第一个参数 collegeId 作为key
-  static async getMajorsByCollege(collegeId: string) {
+  //根据学院ID获取专业列表
+  static async getMajorsByCollege(collegeId: string): Promise<Major[]> {
     const response = await axios.get(`/open/colleges/${collegeId}/majors`)
     if (response.data.code === 200) {
       return response.data.data || []
@@ -48,31 +36,7 @@ export class StudentService {
     throw new Error(response.data.message || '加载专业列表失败')
   }
 
-  /**
-   * 强制刷新学院列表（忽略缓存）
-   */
-  @StoreCache(collegeStore.collegesS, true)
-  static async refreshColleges() {
-    const response = await axios.get('/open/colleges')
-    if (response.data.code === 200) {
-      return response.data.data || []
-    }
-    throw new Error(response.data.message || '刷新学院列表失败')
-  }
-
-  /**
-   * 强制刷新专业列表（忽略缓存）
-   */
-  static async refreshMajorsByCollege(collegeId: string) {
-    // 先清除缓存
-    majorStore.clearMajorsByCollege(collegeId)
-    // 重新获取
-    return this.getMajorsByCollege(collegeId)
-  }
-
-  /**
-   * 学生注册
-   */
+  //学生注册
   static async register(studentData: RegisterRequest): Promise<void> {
     const response = await axios.post('/open/register', studentData)
     if (response.data.code !== 200) {
@@ -80,9 +44,7 @@ export class StudentService {
     }
   }
 
-  /**
-   * 验证注册表单
-   */
+  //验证注册表单
   static validateRegisterForm(form: RegisterFormData): ValidationResult {
     if (
       !form.account?.trim() ||
@@ -100,31 +62,6 @@ export class StudentService {
       return { isValid: false, message: '请输入正确格式的手机号' }
     }
 
-    if (form.password.length < 6) {
-      return { isValid: false, message: '密码长度至少6位' }
-    }
-
     return { isValid: true, message: '' }
-  }
-
-  /**
-   * 清除学院缓存
-   */
-  static clearCollegeCache(): void {
-    collegeStore.clearColleges()
-  }
-
-  /**
-   * 清除专业缓存
-   */
-  static clearMajorCache(): void {
-    majorStore.clearMajors()
-  }
-
-  /**
-   * 清除指定学院的专业缓存
-   */
-  static clearMajorCacheByCollege(collegeId: string): void {
-    majorStore.clearMajorsByCollege(collegeId)
   }
 }

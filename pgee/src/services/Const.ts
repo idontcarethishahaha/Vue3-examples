@@ -4,9 +4,9 @@ export const COUNSELOR = 'Ca24'
 export const STUDENT = 'dA5q'
 
 export const ROUTE_PATHS = {
-  ADMIN: '/admin-colleges',
-  COLLEGE_ADMIN: '/collegeadmin-welcome',
-  COUNSELOR: '/counselor-welcome',
-  STUDENT: '/student-welcome',
+  ADMIN: '/admin',
+  COLLEGE_ADMIN: '/collegeadmin',
+  COUNSELOR: '/counselor',
+  STUDENT: '/student',
   SETTINGS: '/settings'
 }

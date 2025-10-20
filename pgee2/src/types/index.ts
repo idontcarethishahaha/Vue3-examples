@@ -1,102 +1,8 @@
 import { usePost } from '@/axios'
 
-export interface ResultVO<T = unknown> {
-  code: number
-  message: string
-  data: T
-}
-
-export interface User {
-  id: string
-  name: string
-  collegeId?: string
-  account: string
-  password?: string
-  role: string
-  tel: string
-  createTime?: string
-  updateTime?: string
-}
-
-export interface StudentInfo {
-  id: string
-  userId: string
-  majorId: string
-  createTime?: string
-  updateTime?: string
-}
-
-//注册请求
-export interface RegisterRequest {
-  account: string
-  name: string
-  tel: string
-  password: string
-  collegeId: string
-  majorId: string
-}
-
-//登录请求
 export interface LoginRequest {
   account: string
   password: string
-}
-
-//登录响应
-export interface LoginResponse {
-  user: User
-  token: string
-  role: string
-}
-
-export interface CounselorInfo {
-  id: string
-  userId: string
-  majorCategoryId: string
-  createTime?: string
-  updateTime?: string
-}
-
-export interface College {
-  id: string
-  name: string
-  createTime?: string
-  updateTime?: string
-}
-
-export interface Major {
-  id: string
-  name: string
-  collegeId: string
-  createTime?: string
-  updateTime?: string
-}
-
-export interface CollegeAddDTO {
-  name: string
-}
-
-export interface CollegeUpdateDTO {
-  name: string
-}
-
-//学院管理员
-export interface CollegeAdmin {
-  id: string
-  name: string
-  account: string
-  password?: string
-  tel: string
-  createTime?: string
-  updateTime?: string
-}
-
-//添加学院管理员
-export interface CollegeAdminAddDTO {
-  name: string
-  account: string
-  tel: string
-  password?: string
 }
 
 export interface UserInfo {
@@ -107,4 +13,126 @@ export interface UserInfo {
 
 export const login = (data: LoginRequest) => {
   return usePost<UserInfo>('/open/login', data)
+}
+
+// 后端返回的统一响应格式
+export interface ResultVO<T = unknown> {
+  code: number
+  number: number
+  message: string
+  data: T
+}
+
+//通用响应
+export interface ApiResponse<T = unknown> {
+  success: boolean
+  data?: T
+  message?: string
+  code?: number
+}
+
+//学院类型
+export interface College {
+  id: string
+  name: string
+  code?: string
+  createTime?: string
+  updateTime?: string
+}
+
+//专业类型
+export interface Major {
+  id: string
+  name: string
+  collegeId?: string
+  code?: string
+}
+
+//用户信息
+export interface User {
+  id: string
+  name: string
+  collegeId?: string
+  account: string
+  password?: string
+  role: string
+  tel?: string
+  createTime?: string
+  updateTime?: string
+}
+
+//学生信息
+export interface StudentInfo {
+  id: string
+  userId: string
+  majorId: string
+  createTime?: string
+  updateTime?: string
+}
+
+//辅导员信息
+export interface CounselorInfo {
+  id: string
+  userId: string
+  majorCategoryId: string
+  createTime?: string
+  updateTime?: string
+}
+
+//注册请求参数
+export interface RegisterRequest {
+  account: string
+  name: string
+  tel: string
+  password: string
+  collegeId: string
+  majorId: string
+}
+
+//登录请求参数
+export interface LoginRequest {
+  account: string
+  password: string
+}
+
+//登录响应（包含token）
+export interface LoginResponse {
+  user: User
+  token: string
+  role: string
+}
+
+//学院类型
+export interface College {
+  id: string
+  name: string
+  createTime?: string
+  updateTime?: string
+}
+
+//添加学院,对应后端的DTO
+export interface AddCollegeRequest {
+  name: string
+}
+
+//更新学院
+export interface UpdateCollegeRequest {
+  name: string
+}
+
+//学院管理员类型
+export interface CollegeAdmin {
+  id: string
+  name: string
+  account: string
+  tel?: string
+  createTime?: string
+}
+
+//添加学院管理员
+export interface AddCollegeAdminRequest {
+  name: string
+  account: string
+  tel?: string
+  password?: string
 }

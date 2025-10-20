@@ -15,10 +15,3 @@ app.config.errorHandler = err => {
   console.error(error)
   createMessageDialog(error)
 }
-
-//全局promise异常处理
-window.addEventListener('unhandledrejection', event => {
-  event.preventDefault()
-  console.error('Unhandled promise rejection:', event.reason)
-  createMessageDialog(event.reason?.message || String(event.reason))
-})

@@ -19,7 +19,7 @@ const adminForm = ref({
   password: ''
 })
 
-// 从路由参数获取学院信息
+// 从路由路径参数获取学院信息,用params
 const currentCollegeId = ref('')
 const currentCollegeName = ref('')
 
@@ -99,8 +99,9 @@ const navigateToColleges = () => {
   router.push('/admin/colleges')
 }
 
-currentCollegeId.value = route.query.collegeId as string
-currentCollegeName.value = decodeURIComponent((route.query.collegeName as string) || '')
+//从route.params获取路径参数
+currentCollegeId.value = route.params.collegeId as string
+currentCollegeName.value = decodeURIComponent((route.params.collegeName as string) || '')
 
 if (!currentCollegeId.value) {
   createMessageDialog('无效的学院信息')
@@ -112,7 +113,6 @@ if (!currentCollegeId.value) {
 
 <template>
   <div class="admins-page">
-    <!-- 面包屑导航 -->
     <div class="breadcrumb">
       <a @click="navigateToColleges" style="cursor: pointer; color: #1890ff">学院管理</a>
       &gt;
@@ -120,7 +120,6 @@ if (!currentCollegeId.value) {
       - 管理员管理
     </div>
 
-    <!-- 页面头部 -->
     <div class="page-header">
       <h2 class="page-title">{{ currentCollegeName }} - 管理员管理</h2>
       <div class="actions">
@@ -136,13 +135,11 @@ if (!currentCollegeId.value) {
       </div>
     </div>
 
-    <!-- 统计信息 -->
     <div class="stats">
       当前学院管理员总数：
       <strong>{{ adminCount }}</strong>
     </div>
 
-    <!-- 管理员列表 -->
     <table v-if="filteredAdmins.length > 0" class="college-table">
       <thead>
         <tr>
@@ -169,13 +166,11 @@ if (!currentCollegeId.value) {
       </tbody>
     </table>
 
-    <!-- 空状态 -->
     <div v-else class="empty-state">
       <h3>暂无管理员</h3>
       <p>当前学院还没有管理员，点击"添加管理员"按钮来添加</p>
     </div>
 
-    <!-- 添加管理员弹窗 -->
     <div v-if="showModal" class="modal-overlay" @click="closeModal">
       <div class="modal" @click.stop>
         <div class="modal-header">
@@ -225,7 +220,6 @@ if (!currentCollegeId.value) {
 </template>
 
 <style scoped>
-/* 仅保留当前页面独有的样式 */
 .breadcrumb {
   margin: 0 0 1rem 0;
   color: #666;

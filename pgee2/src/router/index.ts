@@ -35,8 +35,9 @@ const routes: RouteRecordRaw[] = [
             path: 'colleges',
             component: () => import('@/views/main/admin/CollegesView.vue')
           },
+          // 关键修改：添加动态路径参数 :collegeId 和 :collegeName
           {
-            path: 'college-admins',
+            path: 'college-admins/:collegeId/:collegeName',
             component: () => import('@/views/main/admin/CollegeAdminsView.vue')
           }
         ]

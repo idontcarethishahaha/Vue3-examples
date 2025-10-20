@@ -2,18 +2,18 @@
 import { createMessageDialog } from '@/components/message'
 import { UserService } from '@/services'
 import type { LoginRequest } from '@/types'
-import { onMounted, reactive, ref } from 'vue'
+import { ref } from 'vue'
 
 const loading = ref(false)
 const accountInput = ref<HTMLInputElement>()
 
-const form = reactive<LoginRequest>({
+const form = ref<LoginRequest>({
   account: '',
   password: ''
 })
 
 const handleLogin = async () => {
-  const validation = UserService.validateLoginForm(form)
+  const validation = UserService.validateLoginForm(form.value)
   if (!validation.isValid) {
     createMessageDialog(validation.message)
     return
@@ -21,27 +21,16 @@ const handleLogin = async () => {
 
   loading.value = true
 
-  try {
-    await UserService.loginService({
-      account: form.account.trim(),
-      password: form.password.trim()
-    })
-  } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : '登录失败，请检查网络连接'
-    createMessageDialog(message)
-  } finally {
-    loading.value = false
-  }
+  await UserService.loginService(form.value)
+
+  loading.value = false
 }
 
-onMounted(() => {
-  accountInput.value?.focus()
-
-  if (UserService.isLoggedIn()) {
-    const role = UserService.getRole()
-    console.log('用户已登录，角色:', role)
-  }
-})
+accountInput.value?.focus()
+if (UserService.isLoggedIn()) {
+  const role = UserService.getRole()
+  console.log('用户已登录，角色:', role)
+}
 </script>
 
 <template>

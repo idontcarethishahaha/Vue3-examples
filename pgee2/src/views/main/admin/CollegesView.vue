@@ -59,12 +59,10 @@ const removeCollege = (college: College) => {
   CollegeService.deleteCollege(college)
 }
 
-// 跳转到管理员管理页面
+// 跳转到管理员管理页面,RESTful路径参数拼接
 const manageAdmins = (college: College) => {
-  router.push({
-    path: '/admin/college-admins',
-    query: { collegeId: college.id, collegeName: college.name }
-  })
+  const encodedName = encodeURIComponent(college.name)
+  router.push(`/admin/college-admins/${college.id}/${encodedName}`)
 }
 
 CollegeService.initCollegeManagement()
